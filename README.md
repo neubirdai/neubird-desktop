@@ -35,9 +35,9 @@ At the core is the **Falcon engine** — Neubird’s lightweight, fast investiga
 │   You:  "What's quietly degrading that could page me tonight?"       │
 │                                                                      │
 │   Falcon:                                                            │
-│   ⚡ querying trace_grafana_tempo.spans — p99 latency by service     │
-│   ⚡ querying metric_datadog.cpu_utilization — saturation check      │
-│   ⚡ querying firehydrant.incidents — open incidents last 72h        │
+│   ⚡ querying trace_grafana_tempo.spans — p99 latency by service      │
+│   ⚡ querying metric_datadog.cpu_utilization — saturation check       │
+│   ⚡ querying firehydrant.incidents — open incidents last 72h         │
 │                                                                      │
 │   Three services are trending toward degradation:                    │
 │   1. payment-gateway — p99 latency up 340% in the last 2h            │
