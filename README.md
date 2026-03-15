@@ -1,8 +1,20 @@
-[![NeuBird.ai terminal demo](https://asciinema.org/a/eNVVnr9DfzfTHW4r.svg)](https://asciinema.org/a/eNVVnr9DfzfTHW4r)
+<p align="center">
+  <a href="https://asciinema.org/a/eNVVnr9DfzfTHW4r">
+    <img src="https://asciinema.org/a/eNVVnr9DfzfTHW4r.svg" alt="NeuBird.ai terminal demo" />
+  </a>
+</p>
 
 <p align="center">
   <strong>NeuBird.ai desktop demo</strong>:
   <a href="https://youtu.be/mM4DyT2u8_s">Watch on YouTube</a>
+</p>
+
+<h1 align="center">Neubird Desktop</h1>
+
+<p align="center">
+  <strong>The AI SRE that lives in your terminal.</strong><br/>
+  Predict outages. Prevent incidents. Remediate in real time. Cut cloud waste.<br/>
+  One command. Zero context-switching.
 </p>
 
 <h1 align="center">Neubird Desktop</h1>
