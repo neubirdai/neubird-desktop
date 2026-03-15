@@ -4,10 +4,10 @@
   </a>
 </p>
 
-<h1 align="center">Neubird Desktop</h1>
+<h1 align="center">Neubird AI Desktop Mode for DevOps and SRE Ops</h1>
 
 <p align="center">
-  <strong>The AI SRE that lives in your terminal.</strong><br/>
+  <strong>The AI DevOps and SRE Ops Agent that lives in your terminal.</strong><br/>
   Predict outages. Prevent incidents. Remediate in real time. Cut cloud waste.<br/>
   One command. Zero context-switching.
 </p>
@@ -21,11 +21,11 @@
 
 ---
 
-## What is Neubird?
+## What is Neubird.AI?
 
-Neubird is an **Agentic AI SRE platform** that connects to the tools already in your observability and operations stack — Datadog, Splunk, Grafana, PagerDuty, AWS, Azure, GCP, ServiceNow, GitHub, and more — and reasons across all of them together.
+Neubird is an **Agentic AI DevOps/SRE platform** that connects to the tools already in your observability and operations stack — Datadog, Splunk, Grafana, PagerDuty, AWS, Azure, GCP, ServiceNow, GitHub, and more — and reasons across all of them together.
 
-**Neubird Desktop** brings that power to your terminal. Ask questions in plain English and get back root cause analysis, cost projections, risk forecasts, and remediation plans backed by real evidence from your live telemetry.
+**Neubird.AI Desktop** brings that power to your terminal. Ask questions in plain English and get back root cause analysis, cost projections, risk forecasts, and remediation plans backed by real evidence from your live telemetry.
 
 No dashboards. No tab switching. No runbooks.
 
