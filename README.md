@@ -1,8 +1,4 @@
-<p align="center">
-  <a href="https://youtu.be/mM4DyT2u8_s">
-    <img src="https://img.youtube.com/vi/mM4DyT2u8_s/0.jpg" alt="NeuBird.ai desktop demo" />
-  </a>
-</p>
+[![NeuBird.ai terminal demo](https://asciinema.org/a/eNVVnr9DfzfTHW4r.svg)](https://asciinema.org/a/eNVVnr9DfzfTHW4r)
 
 <p align="center">
   <strong>NeuBird.ai desktop demo</strong>:
