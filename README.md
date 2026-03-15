@@ -14,7 +14,7 @@
   <a href="https://neubird.ai">Website</a> ·
   <a href="https://help.neubird.ai">Docs</a> ·
   <a href="https://github.com/neubirdai/falcon-desktop/releases">Releases</a> ·
-  <a href="https://neubird.ai/signup">Get a Free Account</a>
+  <a href="https://signup.registration.neubird.ai/registrations">Get a Free Account</a>
 </p>
 
 ---
