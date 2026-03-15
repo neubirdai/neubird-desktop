@@ -1,7 +1,9 @@
 <p align="center">
-[![NeuBird.ai desktop demo](https://img.youtube.com/vi/mM4DyT2u8_s/0.jpg)](https://youtu.be/mM4DyT2u8_s)
-
-**NeuBird.ai desktop demo**: [Watch on YouTube](https://youtu.be/mM4DyT2u8_s)
+  <a href="https://youtu.be/mM4DyT2u8_s">
+    <img src="https://img.youtube.com/vi/mM4DyT2u8_s/0.jpg" alt="NeuBird.ai desktop demo" />
+  </a><br/>
+  <strong>NeuBird.ai desktop demo</strong>:
+  <a href="https://youtu.be/mM4DyT2u8_s">Watch on YouTube</a>
 </p>
 
 <h1 align="center">Neubird Desktop</h1>
