@@ -1,5 +1,5 @@
 <p align="center">
-  <script src="https://asciinema.org/a/eNVVnr9DfzfTHW4r.js" id="asciicast-eNVVnr9DfzfTHW4r" async data-autoplay="true" data-loop="true"></script>
+  <a href="https://asciinema.org/a/eNVVnr9DfzfTHW4r" target="_blank"><img src="https://asciinema.org/a/eNVVnr9DfzfTHW4r.svg" /></a>
 </p>
 
 <h1 align="center">Neubird AI Desktop Mode for DevOps and SRE Ops</h1>
