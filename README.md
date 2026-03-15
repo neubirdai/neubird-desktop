@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="https://neubird.ai/logo-light.svg" alt="NeuBird" width="200"/>
+[![NeuBird.ai desktop demo](https://img.youtube.com/vi/mM4DyT2u8_s/0.jpg)](https://youtu.be/mM4DyT2u8_s)
+
+**NeuBird.ai desktop demo**: [Watch on YouTube](https://youtu.be/mM4DyT2u8_s)
 </p>
 
 <h1 align="center">Neubird Desktop</h1>
