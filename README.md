@@ -84,6 +84,12 @@ neubird
 
 That is it. Neubird discovers your telemetry inventory, maps your schemas, and drops you into an interactive terminal session. Ask anything.
 
+### 4. Updating
+
+```sh
+brew update && brew upgrade neubird
+```
+
 ---
 
 ## What Can It Do?
