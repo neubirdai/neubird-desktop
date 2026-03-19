@@ -300,7 +300,6 @@ brew install neubirdai/tap/neubird
 neubird
 ```
 
-Full documentation at [neubirdai.github.io/falcon](https://neubirdai.github.io/falcon/).
 
 Questions? Reach us at [neubird.ai](https://neubird.ai) or open an issue in this repo.
 
