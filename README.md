@@ -210,16 +210,17 @@ Every 🧠 is a permanent memory. NeuBird carries these forward into every futur
 
 ### What it remembers
 
-NeuBird builds four types of persistent memory automatically:
+NeuBird builds persistent memory across every session:
 
 | What | How it learns | Example |
 |---|---|---|
 | **Your preferences** | You tell it what to focus on | _"Prioritize Kubernetes-layer evidence first"_ |
-| **Tribal knowledge** | You share infrastructure facts | _"Payment service has a known 30s timeout"_ |
-| **SQL rules** | Saved automatically when a query fails | _"Never use UNION with this FDW"_ |
-| **Table mappings** | Saved after successful investigations | _"For latency questions, use metrics.http\_duration"_ |
+| **Tribal knowledge** | You share facts about your environment | _"Payment service has a known 30s timeout"_ |
+| **Investigation patterns** | Saved after successful investigations | _"For latency issues, check the API gateway first, then trace upstream"_ |
+| **Corrections** | You tell it when it's wrong | _"That's the wrong metric table — use custom\_duration instead"_ |
+| **Best practices** | You endorse what works | _"Good — checking deploy logs first saved time"_ |
 
-The first two come from you. The last two NeuBird figures out on its own.
+Some of this comes from you. The rest NeuBird figures out on its own by observing which approaches lead to answers and which hit dead ends.
 
 ### It also learns from your feedback
 
@@ -227,9 +228,9 @@ When an investigation completes, NeuBird asks for a 👍 or 👎. That feedback 
 
 - **👍** — NeuBird notes the approach that worked and repeats it
 - **👎** — NeuBird records what to avoid and tries a different path next time
-- **Corrections** — Say _"no, use table X instead"_ mid-investigation and NeuBird saves it permanently
+- **Corrections** — Say _"no, check the deployment history first"_ mid-investigation and NeuBird saves it permanently
 
-Over time, NeuBird stops exploring blind and goes straight to the tables, queries, and investigation patterns that work for _your_ environment.
+Over time, NeuBird stops guessing and goes straight to the services, signals, and investigation patterns that work for _your_ environment.
 
 ---
 
