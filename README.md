@@ -12,7 +12,7 @@
 
 <p align="center">
   <a href="https://neubird.ai">Website</a> ·
-  <a href="https://neubirdai.github.io/falcon/">Docs</a> ·
+  <a href="https://help.neubird.ai">Docs</a> ·
   <a href="https://github.com/neubirdai/falcon/releases">Releases</a> ·
   <a href="https://signup.registration.neubird.ai/registrations">Get a Free Account</a>
 </p>
