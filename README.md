@@ -2,32 +2,32 @@
   <a href="https://asciinema.org/a/eNVVnr9DfzfTHW4r" target="_blank"><img src="https://asciinema.org/a/eNVVnr9DfzfTHW4r.svg" /></a>
 </p>
 
-<h1 align="center">Neubird AI Desktop Mode for DevOps and SRE Ops</h1>
+<h1 align="center">NeuBird Desktop — Production Ops Agent in Your Terminal</h1>
 
 <p align="center">
-  <strong>The AI DevOps and SRE Ops Agent that lives in your terminal.</strong><br/>
-  Predict outages. Prevent incidents. Remediate in real time. Cut cloud waste.<br/>
+  <strong>The AI DevOps and SRE agent that lives in your terminal.</strong><br/>
+  Prevent outages. Resolve incidents. Optimize cloud spend.<br/>
   One command. Zero context-switching.
 </p>
 
 <p align="center">
   <a href="https://neubird.ai">Website</a> ·
-  <a href="https://help.neubird.ai">Docs</a> ·
-  <a href="https://github.com/neubirdai/falcon-desktop/releases">Releases</a> ·
+  <a href="https://neubirdai.github.io/falcon/">Docs</a> ·
+  <a href="https://github.com/neubirdai/falcon/releases">Releases</a> ·
   <a href="https://signup.registration.neubird.ai/registrations">Get a Free Account</a>
 </p>
 
 ---
 
-## What is Neubird.AI?
+## What is NeuBird?
 
-Neubird is an **Agentic AI DevOps/SRE platform** that connects to the tools already in your observability and operations stack — Datadog, Splunk, Grafana, PagerDuty, AWS, Azure, GCP, ServiceNow, GitHub, and more — and reasons across all of them together.
+NeuBird is an **agentic AI SRE platform** that connects to the tools already in your observability and operations stack — Datadog, Splunk, Grafana, PagerDuty, AWS, Azure, GCP, ServiceNow, GitHub, and more — and reasons across all of them together.
 
-**Neubird.AI Desktop** brings that power to your terminal. Ask questions in plain English and get back root cause analysis, cost projections, risk forecasts, and remediation plans backed by real evidence from your live telemetry.
+**NeuBird Desktop** brings that power to your terminal. Ask questions in plain English and get back root cause analysis, cost projections, risk forecasts, and remediation plans backed by real evidence from your live telemetry.
 
 No dashboards. No tab switching. No runbooks.
 
-At the core is the **Falcon engine** — Neubird’s lightweight, fast investigation engine for desktop workflows. Falcon is designed to move quickly, synthesize evidence across systems, and continuously improve as Neubird upgrades the engine over time.
+At the core is the **Falcon engine** — NeuBird's investigation engine powered by Claude. Falcon explores your schema, writes and executes SQL, correlates evidence across data sources, and continuously improves as it learns your infrastructure.
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────┐
@@ -58,23 +58,58 @@ At the core is the **Falcon engine** — Neubird’s lightweight, fast investiga
 **macOS** (Homebrew)
 
 ```sh
-brew tap neubirdai/tap
-brew install neubird
+brew install neubirdai/tap/neubird
 ```
 
-**Ubuntu / Debian**
+**Linux** (Snap)
 
 ```sh
-snap install neubird-desktop
+sudo snap install neubird-desktop
 ```
 
-**Other platforms** — grab the binary from [Releases](https://github.com/neubirdai/falcon-desktop/releases).
+**Linux** (Debian / Ubuntu)
+
+```sh
+curl -LO https://github.com/neubirdai/falcon/releases/latest/download/neubird_linux_amd64.deb
+sudo dpkg -i neubird_linux_amd64.deb
+```
+
+**Linux** (Fedora / RHEL)
+
+```sh
+curl -LO https://github.com/neubirdai/falcon/releases/latest/download/neubird_linux_amd64.rpm
+sudo rpm -i neubird_linux_amd64.rpm
+```
+
+**Windows**
+
+```powershell
+# Download and extract
+Invoke-WebRequest -Uri "https://github.com/neubirdai/falcon/releases/latest/download/neubird_windows_amd64.zip" -OutFile neubird.zip
+Expand-Archive neubird.zip -DestinationPath "$env:LOCALAPPDATA\neubird"
+
+# Add to PATH (current session)
+$env:PATH += ";$env:LOCALAPPDATA\neubird"
+
+# Add to PATH permanently (requires terminal restart)
+[Environment]::SetEnvironmentVariable("PATH", $env:PATH + ";$env:LOCALAPPDATA\neubird", "User")
+```
+
+**Docker**
+
+```sh
+docker run -it --rm \
+  -e ANTHROPIC_API_KEY=sk-ant-... \
+  neubirdai/neubird-desktop:latest
+```
+
+**Other platforms** — pre-built binaries for macOS (Apple Silicon + Intel), Linux (x86_64 + ARM64), and Windows (x86_64) are available on the [releases page](https://github.com/neubirdai/falcon/releases/latest).
 
 ### 2. Connect your account
 
-Sign up at **[neubird.ai/signup](https://neubird.ai/signup)** if you do not have an account yet.
+Sign up at **[neubird.ai/signup](https://signup.registration.neubird.ai/registrations)** if you do not have an account yet.
 
-Neubird connects to your existing telemetry tools — Datadog, Splunk, Grafana, AWS, and more — via read-only API keys. No agents to install. No infrastructure changes.
+NeuBird connects to your existing telemetry tools — Datadog, Splunk, Grafana, AWS, and more — via read-only API keys. No agents to install. No infrastructure changes.
 
 ### 3. Launch
 
@@ -82,75 +117,79 @@ Neubird connects to your existing telemetry tools — Datadog, Splunk, Grafana, 
 neubird
 ```
 
-That is it. Neubird discovers your telemetry inventory, maps your schemas, and drops you into an interactive terminal session. Ask anything.
+NeuBird discovers your telemetry inventory, maps your schemas, and drops you into an interactive terminal session. Ask anything.
 
 ### 4. Updating
 
 ```sh
-brew update && brew upgrade neubird
+# macOS
+brew upgrade neubird
+
+# Snap
+sudo snap refresh neubird-desktop
+
+# Windows / other — download the latest release
 ```
 
 ---
 
 ## What Can It Do?
 
-### 🔮 Predict — Know what breaks before it breaks
+### Prevent — Stop incidents before they start
 
-Neubird detects degradation signatures before they become incidents. It reads trends across metrics, traces, logs, incidents, and topology to forecast what is most likely to page you next.
-
-```text
-› Based on current trends, what services are at risk of degrading in the next 24 hours?
-```
-
-Neubird queries latency percentiles, error rates, resource saturation, traffic growth, and dependency health to tell you where capacity runs out and which services are on a collision course.
-
-### 🛡️ Prevent — Stop incidents before they start
-
-Do not wait for alerts. Run a proactive health sweep and catch issues while they are still cheap to fix.
+Run a proactive health sweep and catch issues while they are still cheap to fix.
 
 ```text
-› /health
+> /health
 ```
 
-Neubird runs a systematic sweep across your infrastructure — metrics, logs, traces, incidents, topology, and cost signals — and produces a structured report:
+NeuBird scans across your infrastructure — metrics, logs, traces, incidents, topology, and cost signals — and produces a structured Good/Bad/Ugly report with evidence and recommended actions.
 
-| Section | What it covers |
-|---|---|
-| 🟢 **Good** | Services operating normally, with evidence to prove it |
-| 🔴 **Bad** | Active problems with evidence, blast radius, and timeline |
-| 🟡 **Ugly** | Not broken yet, but trending the wrong way |
-| ⚠️ **Watch** | Monitoring gaps, single points of failure, upcoming capacity cliffs |
-| 💰 **Cost** | Cardinality hotspots, log noise, idle compute, waste |
+It also detects degradation signatures before they become incidents. Ask what is most likely to page you next, and NeuBird queries latency percentiles, error rates, resource saturation, and dependency health to tell you where capacity runs out.
 
-### 🔧 Remediate — Fix what is broken right now
+### Resolve — Fix what is broken right now
 
-When something is on fire, Neubird investigates autonomously. Falcon queries telemetry, correlates across tools, and delivers a root cause analysis with supporting evidence and a remediation plan — in minutes, not hours.
+When something is on fire, NeuBird investigates autonomously — querying telemetry, correlating across tools, and delivering root cause analysis with a remediation plan in minutes.
 
 ```text
-› The checkout service is returning 503s — what's causing it and what should I do?
+> The checkout service is returning 503s — what's causing it and what should I do?
 ```
 
-Neubird traces the failure across service maps, correlates with recent deploys and config changes, checks upstream and downstream dependencies, and returns a step-by-step fix ranked by likelihood and blast radius.
+NeuBird traces the failure across service maps, correlates with recent deploys and config changes, checks upstream and downstream dependencies, and returns a step-by-step fix ranked by likelihood and blast radius.
 
-### 💰 Optimize — Find the cloud spend you are wasting
-
-Run a cost analysis to identify metric cardinality bloat, log volume waste, over-provisioned compute, and idle resources — then project what spend looks like in 7 and 30 days if nothing changes.
+### Optimize — Find the cloud spend you are wasting
 
 ```text
-› /cost
+> /cost
 ```
 
-You get a ranked list of waste drivers separated into **quick wins** and **engineering projects**, with ROI estimates for each.
+Get a ranked list of waste drivers — metric cardinality bloat, log volume noise, over-provisioned compute, idle resources — with ROI estimates and 7/30-day projections.
 
-### 🔍 Discover — Catch risks before they ship
+---
 
-Ask Neubird to cross-reference code changes with production telemetry so you can identify what could go wrong before a change is merged or deployed.
+## Key Features
 
-```text
-› What pending PRs or recent merges are most likely to cause problems?
-```
+**Three agent personas** — Switch investigation styles to match the situation:
 
-Neubird checks current production load, historical incidents, related services, recent changes, and dependency health — and tells you which changes look risky and why.
+| Persona | Model | Best for |
+|---|---|---|
+| **Responder** | Claude Haiku | Fast triage, immediate next actions |
+| **Analyst** | Claude Sonnet | Root cause analysis, deep investigation |
+| **Architect** | Claude Opus | Runbooks, design reviews, systemic fixes |
+
+Switch at any time with `/agent`.
+
+**Collapsible tool output** — Press `Ctrl+O` to review every SQL query and tool result from an investigation. Expand individual calls to inspect the raw data, or collapse them to focus on the analysis.
+
+**Persistent learning** — NeuBird remembers which SQL constructs work with your database and which tables matter for each investigation type. It gets faster and more accurate the more you use it.
+
+**Custom slash commands** — Drop a `.md` file into the `skills/` directory to create reusable investigation templates. The filename becomes the command, and the content becomes the prompt.
+
+**Context-aware starter tiles** — On startup, NeuBird analyzes your telemetry schema and suggests relevant investigation starting points. Navigate with arrow keys and hit Enter.
+
+**MCP tool support** — Extend NeuBird with [Model Context Protocol](https://modelcontextprotocol.io/) servers for capabilities beyond SQL.
+
+**Input history & search** — Use `↑`/`↓` to cycle through previous questions, or `Ctrl+R` to search.
 
 ---
 
@@ -158,13 +197,15 @@ Neubird checks current production load, historical incidents, related services, 
 
 | Command | What it does |
 |---|---|
-| `/health` | Full infrastructure health sweep (default: 1 hour lookback) |
-| `/health 24h` | Deep dive with 24-hour context |
-| `/cost` | Cloud cost baseline + 24-hour spend projection |
-| `/reset` | Clear conversation history and start fresh |
-| `/help` | Show available commands |
+| `/health` | Full infrastructure health sweep (default: 1h lookback) |
+| `/health 4h` | Health sweep with custom lookback window |
+| `/cost` | Cloud cost analysis + 24h spend projection |
+| `/agent` | Switch agent persona (Responder / Analyst / Architect) |
+| `/tables` | List available telemetry tables |
+| `/project` | Switch database |
+| `/reset` | Clear conversation history |
 
-Or just type a question in plain English. Neubird figures out what to query.
+Or just type a question in plain English.
 
 ---
 
@@ -180,11 +221,11 @@ Or just type a question in plain English. Neubird figures out what to query.
 ┌─────────────────────────────────────────────────────────────────┐
 │                      FALCON ENGINE                              │
 │                                                                 │
-│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌────────────┐    │
-│  │ Discover  │→ │Understand │→ │Investigate│→ │ Synthesize │    │
-│  │ schemas   │  │ tables    │  │ execute   │  │ findings   │    │
-│  │ & tools   │  │ & signals │  │ queries   │  │ & actions  │    │
-│  └───────────┘  └───────────┘  └───────────┘  └────────────┘    │
+│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌────────────┐   │
+│  │ Discover  │→ │Understand │→ │Investigate│→ │ Synthesize │   │
+│  │ schemas   │  │ tables    │  │ execute   │  │ findings   │   │
+│  │ & tools   │  │ & signals │  │ queries   │  │ & actions  │   │
+│  └───────────┘  └───────────┘  └───────────┘  └────────────┘   │
 │                                                                 │
 │            reads from your telemetry (read-only)                │
 └──────────────────────┬──────────────────────────────────────────┘
@@ -199,15 +240,13 @@ Or just type a question in plain English. Neubird figures out what to query.
 
 Falcon operates in an **agentic loop**: it forms a hypothesis, queries your telemetry to test it, refines based on what it finds, and repeats until it has a confident answer — like a strong SRE working through evidence, just much faster.
 
-Because Falcon is the engine inside Neubird Desktop, the desktop experience can improve over time as Neubird upgrades the engine, expands connectors, and sharpens its reasoning.
-
-Every important claim is grounded in evidence from the connected telemetry and systems it inspected.
+Every claim is grounded in evidence from the data sources it inspected.
 
 ---
 
 ## What It Connects To
 
-Neubird integrates with your existing stack through read-only API connections. Nothing to install on your infrastructure.
+NeuBird integrates with your existing stack through read-only API connections. Nothing to install on your infrastructure.
 
 | Category | Integrations |
 |---|---|
@@ -217,18 +256,18 @@ Neubird integrates with your existing stack through read-only API connections. N
 | **Traces** | Grafana Tempo, Jaeger, OpenTelemetry |
 | **CI/CD & Code** | GitHub, GitLab, ArgoCD, Jenkins |
 | **Communication** | Slack, Jira |
-| **Coding Agents** | Cursor, Copilot, Windsurf, Cline, Claude Code |
+| **Data Warehouses** | Snowflake, BigQuery, Redshift |
 | **IaC** | Terraform, Pulumi, Ansible, Helm, Crossplane |
 
 ---
 
 ## Security
 
-Neubird is built for enterprises that take security seriously.
+NeuBird is built for enterprises that take security seriously.
 
 - **SOC 2 Type II certified**
 - **Zero data persistence** — telemetry is processed in memory and purged after each session
-- **Read-only access** — Neubird does not modify your infrastructure
+- **Read-only access** — NeuBird never modifies your infrastructure
 - **Your data is never used to train models**
 - **VPC deployment available** for regulated environments
 - **SSO/SAML, RBAC, and full audit trails**
@@ -239,7 +278,6 @@ Neubird is built for enterprises that take security seriously.
 
 - **SRE / IT Ops** — Cut MTTR and get root cause in minutes, not hours
 - **DevOps / Platform Engineering** — Proactive health checks, cost optimization, and deployment risk analysis from your terminal
-- **Network Ops** — Cross-stack correlation that connects network metrics to application behavior
 - **Engineering Leadership** — Evidence-backed health reports and cost projections on demand
 
 ---
@@ -253,22 +291,16 @@ Neubird is built for enterprises that take security seriously.
 | **Avg Investigation Time** | 18 minutes |
 | **Cost Reduction** | 60%+ |
 
-> *"Having an expert SRE working alongside our teams 24/7 has transformed how we operate. Critical issues that once took days to resolve are now handled in minutes."*
-
 ---
 
 ## Get Started
 
 ```sh
-# Install
-brew tap neubirdai/tap && brew install neubird
-
-# Sign up for an account at neubird.ai/signup
-# Connect your telemetry tools
-
-# Launch
+brew install neubirdai/tap/neubird
 neubird
 ```
+
+Full documentation at [neubirdai.github.io/falcon](https://neubirdai.github.io/falcon/).
 
 Questions? Reach us at [neubird.ai](https://neubird.ai) or open an issue in this repo.
 
