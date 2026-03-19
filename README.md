@@ -167,6 +167,72 @@ Get a ranked list of waste drivers — metric cardinality bloat, log volume nois
 
 ---
 
+## It Learns Your Infrastructure
+
+Most AI tools start from zero every session. NeuBird remembers.
+
+The more you use it, the smarter it gets — learning your infrastructure, your preferences, and the investigation patterns that work for your environment. Everything is stored locally and persists across sessions.
+
+### Teach it your role
+
+Tell NeuBird what you care about, and it reshapes how it investigates:
+
+```text
+❯ remember my preferences that you should focus on k8s
+
+  🧠 Learned (preference): When investigating incidents, prioritize Kubernetes-layer
+     evidence first: pod events, kubelet logs, node conditions, workload status...
+
+  completed in 12.7s
+
+Saved. Going forward I'll lead with Kubernetes-layer evidence — pod events,
+kubelet logs, node conditions, workload status (Deployments, DaemonSets,
+CronJobs), ECR/image pull issues, and scheduler/controller-manager signals —
+before diving into app metrics or traces.
+```
+
+This works for any specialization:
+
+```text
+❯ you are a network admin, focus on network issues first
+  🧠 Learned (preference): Prioritize network-layer evidence first: VPC flow logs,
+     security groups, NACLs, DNS resolution, load balancer health, and connectivity...
+
+❯ always check deploy logs before blaming a service
+  🧠 Learned (preference): Always check deploy logs before blaming a service...
+
+❯ our payment service has a known 30s timeout that causes false positives in latency alerts
+  🧠 Learned (knowledge): Payment service has a known 30s timeout that causes
+     false positives in latency alerts...
+```
+
+Every 🧠 is a permanent memory. NeuBird carries these forward into every future investigation — no need to repeat yourself.
+
+### What it remembers
+
+NeuBird builds four types of persistent memory automatically:
+
+| What | How it learns | Example |
+|---|---|---|
+| **Your preferences** | You tell it what to focus on | _"Prioritize Kubernetes-layer evidence first"_ |
+| **Tribal knowledge** | You share infrastructure facts | _"Payment service has a known 30s timeout"_ |
+| **SQL rules** | Saved automatically when a query fails | _"Never use UNION with this FDW"_ |
+| **Table mappings** | Saved after successful investigations | _"For latency questions, use metrics.http\_duration"_ |
+
+The first two come from you. The last two NeuBird figures out on its own.
+
+### It also learns from your feedback
+
+When an investigation completes, NeuBird asks for a 👍 or 👎. That feedback shapes future behavior:
+
+- **👍** — NeuBird notes the approach that worked and repeats it
+- **👎** — NeuBird records what to avoid and tries a different path next time
+- **Corrections** — Say _"no, use table X instead"_ mid-investigation and NeuBird saves it permanently
+
+Over time, NeuBird stops exploring blind and goes straight to the tables, queries, and investigation patterns that work for _your_ environment.
+
+---
+
 ## Key Features
 
 **Three agent personas** — Switch investigation styles to match the situation:
@@ -179,9 +245,9 @@ Get a ranked list of waste drivers — metric cardinality bloat, log volume nois
 
 Switch at any time with `/agent`.
 
-**Collapsible tool output** — Press `Ctrl+O` to review every SQL query and tool result from an investigation. Expand individual calls to inspect the raw data, or collapse them to focus on the analysis.
+**Persistent learning** — NeuBird remembers your preferences, your infrastructure quirks, and which investigation patterns work. It gets faster and more accurate every session. See [It Learns Your Infrastructure](#it-learns-your-infrastructure).
 
-**Persistent learning** — NeuBird remembers which SQL constructs work with your database and which tables matter for each investigation type. It gets faster and more accurate the more you use it.
+**Collapsible tool output** — Press `Ctrl+]` to review every SQL query and tool result from an investigation. Expand individual calls to inspect the raw data, or collapse them to focus on the analysis.
 
 **Custom slash commands** — Drop a `.md` file into the `skills/` directory to create reusable investigation templates. The filename becomes the command, and the content becomes the prompt.
 
