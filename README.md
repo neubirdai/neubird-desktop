@@ -355,8 +355,9 @@ NeuBird is built for enterprises that take security seriously.
 |---|---|
 | **MTTR Reduction** | Up to 90% |
 | **Alert Noise Reduction** | 78% |
-| **Avg Investigation Time** | 18 minutes |
-| **Cost Reduction** | 60%+ |
+| **Avg Investigation Time** | ~2 minutes |
+| **Cost Reduction** | 70%+ |
+| **Average Confidence Score** | 92%+ |
 
 ---
 
