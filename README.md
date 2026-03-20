@@ -13,7 +13,7 @@
 <p align="center">
   <a href="https://neubird.ai">Website</a> ·
   <a href="https://help.neubird.ai">Docs</a> ·
-  <a href="https://github.com/neubirdai/falcon/releases">Releases</a> ·
+  <a href="https://github.com/neubirdai/neubird-desktop/releases">Releases</a> ·
   <a href="https://signup.registration.neubird.ai/registrations">Get a Free Account</a>
 </p>
 
@@ -70,22 +70,23 @@ sudo snap install neubird-desktop
 **Linux** (Debian / Ubuntu)
 
 ```sh
-curl -LO https://github.com/neubirdai/falcon/releases/latest/download/neubird_linux_amd64.deb
+curl -LO https://github.com/neubirdai/neubird-desktop/releases/latest/download/neubird_linux_amd64.deb
 sudo dpkg -i neubird_linux_amd64.deb
 ```
 
 **Linux** (Fedora / RHEL)
 
 ```sh
-curl -LO https://github.com/neubirdai/falcon/releases/latest/download/neubird_linux_amd64.rpm
+curl -LO https://github.com/neubirdai/neubird-desktop/releases/latest/download/neubird_linux_amd64.rpm
 sudo rpm -i neubird_linux_amd64.rpm
 ```
 
 **Windows**
 
 ```powershell
-# Download and extract
-Invoke-WebRequest -Uri "https://github.com/neubirdai/falcon/releases/latest/download/neubird_windows_amd64.zip" -OutFile neubird.zip
+# Download and extract (update VERSION to the latest release from https://github.com/neubirdai/neubird-desktop/releases)
+$VERSION = "1.0.32"
+Invoke-WebRequest -Uri "https://github.com/neubirdai/neubird-desktop/releases/download/v$VERSION/neubird_${VERSION}_windows_amd64.zip" -OutFile neubird.zip
 Expand-Archive neubird.zip -DestinationPath "$env:LOCALAPPDATA\neubird"
 
 # Add to PATH (current session)
@@ -103,7 +104,7 @@ docker run -it --rm \
   neubirdai/neubird-desktop:latest
 ```
 
-**Other platforms** — pre-built binaries for macOS (Apple Silicon + Intel), Linux (x86_64 + ARM64), and Windows (x86_64) are available on the [releases page](https://github.com/neubirdai/falcon/releases/latest).
+**Other platforms** — pre-built binaries for macOS (Apple Silicon + Intel), Linux (x86_64 + ARM64), and Windows (x86_64) are available on the [releases page](https://github.com/neubirdai/neubird-desktop/releases/latest).
 
 ### 2. Connect your account
 
