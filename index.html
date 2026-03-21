@@ -1666,7 +1666,23 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Collapsible tool output</strong> — Press <code>Ctrl+O</code> to review every tool call and result from an investigation. Expand individual calls to inspect the data, or collapse them to focus on the analysis.</p>
+<p><strong>Collapsible tool output</strong> — Press <code>Ctrl+O</code> to review every tool call and result from an investigation — even while it's still running. Expand individual calls to inspect full data tables, or collapse them to focus on the analysis. Works mid-investigation: pause to browse results, then press <code>Esc</code> to resume watching.</p>
+<p><strong>Local CLI integration</strong> — NeuBird automatically detects SRE tools on your machine (kubectl, docker, aws, gcloud, helm, git, terraform, curl, dig, openssl) and makes them available to the AI agent as read-only tools. Ask "how many pods are in the production namespace?" and NeuBird will run <code>kubectl get pods</code> directly. All commands are safety-gated — destructive operations (apply, delete, create, scale) are blocked at the code level.</p>
+<p><strong>Tool inventory</strong> — On startup, NeuBird displays every tool available to the agent — grouped by source (built-in, cloud MCP, local CLI). Run <code>/tools</code> anytime to see the full inventory with capabilities. Example:</p>
+<pre><code>🔧 Tool inventory (18 tools)
+  📦 Built-in (12)
+     ✓ exec_sql                  Execute SQL queries against the database
+     ✓ list_schemas              List database schemas
+     ...
+  ☁️  ACE MCP (4)
+     ✓ external_tool             External service queries
+     ...
+  💻 Local CLI (2)
+     ✓ kubectl                   Read-only Kubernetes inspection (pods, logs, events)
+     ✓ run_local_command         Execute read-only local CLI commands
+  🔍 Detected CLIs: kubectl (v1.28.2), docker (24.0.7), git (2.39.0)
+  ⬚  Not found: aws, gcloud, helm, terraform
+</code></pre>
 <p><strong>Persistent learning</strong> — NeuBird remembers which queries work with your data sources and which telemetry tables matter for each type of investigation. It gets faster and more accurate over time.</p>
 <p><strong>Custom slash commands</strong> — Drop a <code>.md</code> file into the <code>skills/</code> directory to create custom investigation templates. The filename becomes the command, and the content becomes the prompt.</p>
 <p><strong>MCP tool support</strong> — Extend NeuBird with Model Context Protocol servers for additional data sources and capabilities beyond SQL.</p>
@@ -1748,6 +1764,10 @@ neubird --assess
 <td>List available telemetry tables</td>
 </tr>
 <tr>
+<td><code>/tools</code></td>
+<td>Show all tools with capabilities</td>
+</tr>
+<tr>
 <td><code>/project</code></td>
 <td>Switch database</td>
 </tr>
@@ -1776,7 +1796,7 @@ neubird --assess
 </tr>
 <tr>
 <td><code>Ctrl+O</code></td>
-<td>Toggle tool output review mode</td>
+<td>Toggle tool output review (works mid-investigation)</td>
 </tr>
 <tr>
 <td><code>↑ / ↓</code></td>
@@ -1812,6 +1832,7 @@ neubird --assess
 <p><strong>CI/CD &amp; Source Control</strong> — GitHub, GitLab, ArgoCD</p>
 <p><strong>Data Warehouses</strong> — Snowflake, BigQuery, Redshift</p>
 <p><strong>And more</strong> — Jira, Confluence, Slack, Kubernetes, custom FDW plugins</p>
+<p><strong>Local CLI tools</strong> (auto-detected on your machine) — kubectl, helm, docker/podman, AWS CLI, gcloud, Azure CLI, git, terraform, curl, dig, openssl</p>
 <h2 id="documentation">Documentation</h2>
 <p>Full documentation is available at <a href="https://neubirdai.github.io/neubird-desktop/">neubirdai.github.io/neubird-desktop</a>.</p>
 <h2 id="license">License</h2>
