@@ -1685,6 +1685,59 @@
 </code></pre>
 <p><strong>Persistent learning</strong> — NeuBird remembers which queries work with your data sources and which telemetry tables matter for each type of investigation. It gets faster and more accurate over time.</p>
 <p><strong>Custom slash commands</strong> — Drop a <code>.md</code> file into the <code>skills/</code> directory to create custom investigation templates. The filename becomes the command, and the content becomes the prompt.</p>
+<p><strong>Built-in investigation skills</strong> — NeuBird ships with ready-to-use playbooks for the most common SRE workflows:</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/handoff</code></td>
+<td>On-call shift briefing — active incidents, recent deploys, current health, watch items</td>
+</tr>
+<tr>
+<td><code>/changes</code></td>
+<td>Compare two time windows — find every deploy, config change, metric shift, and correlate them</td>
+</tr>
+<tr>
+<td><code>/timeline</code></td>
+<td>Reconstruct a minute-by-minute incident timeline from all telemetry sources</td>
+</tr>
+<tr>
+<td><code>/pir</code></td>
+<td>Generate a leadership-ready post-incident review with 5-whys and action items</td>
+</tr>
+<tr>
+<td><code>/slo</code></td>
+<td>Calculate error budgets, burn rates, and project when SLOs will breach</td>
+</tr>
+<tr>
+<td><code>/blast-radius</code></td>
+<td>Map upstream/downstream dependencies and quantify failure impact</td>
+</tr>
+<tr>
+<td><code>/certs</code></td>
+<td>Scan TLS certificates across endpoints, flag anything expiring within 30 days</td>
+</tr>
+</tbody>
+</table>
+<p>Enable them by copying to your skills directory:</p>
+<pre><code class="language-bash">cp skills/*.md ~/.config/neubird/skills/
+</code></pre>
+<p>NeuBird advertises available skills on the welcome screen so you always know what's possible — no memorization required.</p>
+<p><strong>Watch mode</strong> — Run <code>/watch</code> to enable periodic background health sweeps. NeuBird runs a health assessment on a timer (default: every 4 hours), compares against the previous sweep, and only interrupts you when something <strong>changed</strong>:</p>
+<pre><code class="language-text">&gt; /watch 2h
+  👁️ Watch mode enabled — sweeping every 2h. First sweep starting now...
+
+  👁️ Watch sweep — 16:30 (changes detected)
+  🔴 Bad — Active Problems
+     payment-service error rate increased from 0.1% to 2.4% since last sweep
+     ...
+</code></pre>
+<p>When nothing changed, you get a quiet one-liner. When something meaningful shifts, you get the full report. Use <code>/watch off</code> to disable.</p>
 <p><strong>MCP tool support</strong> — Extend NeuBird with Model Context Protocol servers for additional data sources and capabilities beyond SQL.</p>
 <h2 id="installation">Installation</h2>
 <h3 id="macos-linux-homebrew">macOS / Linux (Homebrew)</h3>
@@ -1754,6 +1807,42 @@ neubird --assess
 <tr>
 <td><code>/cost</code></td>
 <td>Cloud cost analysis + 24h projection</td>
+</tr>
+<tr>
+<td><code>/handoff</code></td>
+<td>On-call shift briefing</td>
+</tr>
+<tr>
+<td><code>/changes</code></td>
+<td>What changed? — compare time windows</td>
+</tr>
+<tr>
+<td><code>/timeline</code></td>
+<td>Reconstruct incident timeline</td>
+</tr>
+<tr>
+<td><code>/pir</code></td>
+<td>Post-incident review document</td>
+</tr>
+<tr>
+<td><code>/slo</code></td>
+<td>SLO burn rate check</td>
+</tr>
+<tr>
+<td><code>/blast-radius</code></td>
+<td>Map failure blast radius</td>
+</tr>
+<tr>
+<td><code>/certs</code></td>
+<td>TLS certificate expiry scan</td>
+</tr>
+<tr>
+<td><code>/watch</code></td>
+<td>Background health sweep (every 4h)</td>
+</tr>
+<tr>
+<td><code>/watch off</code></td>
+<td>Stop background sweeps</td>
 </tr>
 <tr>
 <td><code>/agent</code></td>
