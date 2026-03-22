@@ -69,16 +69,16 @@ Traditional AI tools send a static prompt to an LLM and hope for the best. Falco
 ┌─────────────────────────────────────────────────────────────────┐
 │                      FALCON ENGINE (ACE)                        │
 │                                                                 │
-│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌────────────┐    │
-│  │ Context   │→ │ Evidence  │→ │ Agentic   │→ │ Synthesis  │    │
-│  │ Assembly  │  │ Gathering │  │ Reasoning │  │ & Review   │    │
-│  │           │  │           │  │           │  │            │    │
-│  │ Schema    │  │ SQL       │  │ Parallel  │  │ Sonnet     │    │
-│  │ Inventory │  │ Queries   │  │ Tool Exec │  │ Analysis   │    │
-│  │ Learnings │  │ CLI Tools │  │ Hypothesis│  │    +       │    │
-│  │ History   │  │ MCP Calls │  │ Testing   │  │ Opus       │    │
-│  │ Skills    │  │ API Calls │  │ Iteration │  │ Review     │    │
-│  └───────────┘  └───────────┘  └───────────┘  └────────────┘    │
+│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌────────────┐   │
+│  │ Context   │→ │ Evidence  │→ │ Agentic   │→ │ Synthesis  │   │
+│  │ Assembly  │  │ Gathering │  │ Reasoning │  │ & Review   │   │
+│  │           │  │           │  │           │  │            │   │
+│  │ Schema    │  │ SQL       │  │ Parallel  │  │ Sonnet     │   │
+│  │ Inventory │  │ Queries   │  │ Tool Exec │  │ Analysis   │   │
+│  │ Learnings │  │ CLI Tools │  │ Hypothesis│  │    +       │   │
+│  │ History   │  │ MCP Calls │  │ Testing   │  │ Opus       │   │
+│  │ Skills    │  │ API Calls │  │ Iteration │  │ Review     │   │
+│  └───────────┘  └───────────┘  └───────────┘  └────────────┘   │
 │                                                                 │
 │          confidence tracking at every step (0-100%)             │
 └──────────────────────┬──────────────────────────────────────────┘
@@ -167,18 +167,6 @@ neubird
 
 NeuBird discovers your telemetry inventory, maps your schemas, detects local CLI tools on your machine, and drops you into an interactive terminal session. Ask anything.
 
-### 4. Updating
-
-```sh
-# macOS
-brew upgrade neubird
-
-# Snap
-sudo snap refresh neubird-desktop
-
-# Windows / other — download the latest release
-```
-
 ---
 
 ## What Can It Do?
@@ -192,8 +180,6 @@ sudo snap refresh neubird-desktop
 NeuBird scans across your entire infrastructure — metrics, logs, traces, incidents, topology, and cost signals — and produces a structured **Good / Bad / Ugly** report with evidence and recommended actions.
 
 It detects degradation signatures before they become incidents. Ask what's most likely to page you next, and NeuBird queries latency percentiles, error rates, resource saturation, and dependency health to tell you exactly where capacity runs out.
-
-Every finding is backed by the specific query and data source that produced it. No guessing. No hallucination.
 
 ### Resolve — Fix what's broken right now
 
@@ -211,15 +197,124 @@ Complex investigations trigger a **two-stage review**: Sonnet gathers evidence a
 > /cost
 ```
 
-Get a ranked breakdown of waste drivers — metric cardinality bloat, log volume noise, over-provisioned compute, idle resources — with ROI estimates and 7/30-day spend projections. NeuBird queries your actual utilization data and trends, not just billing dashboards.
+Get a ranked breakdown of waste drivers — metric cardinality bloat, log volume noise, over-provisioned compute, idle resources — with ROI estimates and 7/30-day spend projections.
 
-### Assess — Evaluate risk before it reaches production
+### Watch — Continuous background monitoring
 
 ```text
-> Before we deploy this release — what's the risk?
+> /watch 2h
+  👁️ Watch mode enabled — sweeping every 2h. First sweep starting now...
 ```
 
-NeuBird cross-references your PRs and recent code changes with live telemetry to assess deployment risk. It checks the health of every service the change touches, looks for correlation between past deploys and incidents, and tells you what could break and why.
+NeuBird runs health assessments on a timer, compares against the previous sweep, and only interrupts you when something **changed**. Quiet when nothing's wrong. Loud when it matters. Use `/watch off` to disable.
+
+---
+
+## 🧩 Make It Yours — Skills & Playbooks
+
+NeuBird isn't a black box. It's a platform you extend with your own operational knowledge.
+
+**Skills** are simple Markdown files that turn your team's runbooks, checklists, and investigation patterns into slash commands the AI agent follows. No code. No APIs. Just a `.md` file.
+
+### How it works
+
+Create a file. The filename becomes the command. The content becomes the investigation plan.
+
+```markdown
+# ~/.config/neubird/skills/deploy-check.md
+
+# Pre-deployment safety check
+
+Before approving this deploy, investigate:
+1. Current error rates for all services this PR touches
+2. Any open incidents or active alerts on those services
+3. Resource utilization — are we close to any limits?
+4. Recent deploys in the last 24h that might compound risk
+5. Dependency health — are upstream/downstream services healthy?
+
+Produce a GO / NO-GO recommendation with evidence for each point.
+```
+
+That's it. Next time you launch NeuBird, `/deploy-check` appears as a command. Type it and the agent follows your procedure exactly — using all 28+ tools at its disposal to gather evidence and produce the report you designed.
+
+### Why this matters
+
+Every team has tribal knowledge trapped in wikis nobody reads, runbooks that are always outdated, and checklists that only exist in senior engineers' heads. Skills turn all of that into **executable automation**:
+
+- **Your on-call handoff** becomes `/handoff` — a structured briefing generated from live telemetry every shift change
+- **Your incident review process** becomes `/pir` — a 5-whys analysis with timeline, impact assessment, and action items
+- **Your pre-deploy checklist** becomes `/deploy-check` — evidence-backed GO/NO-GO that juniors and seniors get the same quality from
+- **Your capacity planning** becomes `/capacity` — projected exhaustion dates for every resource you track
+
+The agent brings the intelligence, the tools, and the telemetry access. **You bring the procedure.** Together, it's your team's best engineer available 24/7.
+
+### Built-in skills
+
+NeuBird ships with ready-to-use playbooks for the most common SRE workflows:
+
+| Command | What it does |
+|---|---|
+| `/health` | Full infrastructure health sweep — Good/Bad/Ugly report |
+| `/cost` | Cloud cost analysis + 24h spend projection |
+| `/handoff` | On-call shift briefing — active incidents, recent deploys, health, watch items |
+| `/changes` | Compare two time windows — find every deploy, config change, and metric shift |
+| `/timeline` | Reconstruct a minute-by-minute incident timeline from all telemetry |
+| `/pir` | Post-incident review — timeline, 5-whys, impact, action items |
+| `/slo` | SLO burn rate — error budgets, projections, breach forecasts |
+| `/blast-radius` | Map upstream/downstream dependencies, quantify failure impact |
+| `/certs` | Scan TLS certificates, flag anything expiring within 30 days |
+| `/sev-hunt` | Hunt for active SEVs and brewing incidents |
+| `/weekend-check` | Pre-weekend risk assessment |
+| `/remediation-steps` | Suggest remediation steps with safety tiers |
+
+These work out of the box. No configuration needed.
+
+### Create your own in 60 seconds
+
+```bash
+mkdir -p ~/.config/neubird/skills
+
+cat > ~/.config/neubird/skills/morning-standup.md << 'EOF'
+# Morning standup infrastructure summary
+
+Generate a 2-minute standup update:
+1. What broke overnight? Check incidents and alerts from the last 12h
+2. What shipped? List deploys and config changes since yesterday
+3. What's at risk? Any services trending toward SLO breach
+4. What needs attention today? Expiring certs, capacity warnings, pending rollbacks
+
+Keep it brief. Bullet points. Link every claim to a data source.
+EOF
+```
+
+Restart NeuBird → `/morning-standup` is ready. Your entire team can use the same skill by sharing the `.md` file.
+
+### Skill priority
+
+Skills load from three sources (later overrides earlier):
+
+1. **Built-in** — ships with NeuBird, always available
+2. **Project directory** — `skills/` in your working directory (great for team repos)
+3. **Personal** — `~/.config/neubird/skills/` (your own customizations)
+
+Override any built-in by creating a file with the same name in your personal directory. Your version wins.
+
+### Ideas for your team
+
+| Skill | Use case |
+|---|---|
+| `/morning-standup` | Auto-generate the infrastructure section of your daily standup |
+| `/deploy-check` | Pre-deploy risk assessment tailored to your services |
+| `/customer-impact` | Translate infrastructure issues into customer-facing language for status pages |
+| `/capacity-forecast` | Monthly capacity report for leadership with growth projections |
+| `/security-audit` | Check for exposed endpoints, outdated certs, misconfigured security groups |
+| `/db-health` | Database-specific health check: slow queries, connection pools, replication lag |
+| `/k8s-audit` | Kubernetes resource audit: orphaned pods, over-provisioned requests, pending PVCs |
+| `/cost-by-team` | Break down cloud costs by team/namespace/service owner |
+| `/changelog` | Generate a human-readable changelog from deploy and PR data |
+| `/escalation` | Assess whether an incident should be escalated — severity, blast radius, customer impact |
+
+The pattern is always the same: describe what you want investigated, let the agent figure out which tools to use and which data to query.
 
 ---
 
@@ -231,23 +326,18 @@ The more you use it, the smarter it gets — learning your infrastructure, your 
 
 ### Teach it your role
 
-Tell NeuBird what you care about, and it reshapes how it investigates:
-
 ```text
 ❯ remember that you should focus on k8s first
-
-  🧠 Learned (preference): When investigating incidents, prioritize Kubernetes-layer
-     evidence first: pod events, kubelet logs, node conditions, workload status...
+  🧠 Learned (preference): Prioritize Kubernetes-layer evidence first...
 
 ❯ our payment service has a known 30s timeout that causes false positives
-  🧠 Learned (knowledge): Payment service has a known 30s timeout that causes
-     false positives in latency alerts...
+  🧠 Learned (knowledge): Payment service has a known 30s timeout...
 
 ❯ always check deploy logs before blaming a service
   🧠 Learned (preference): Always check deploy logs before blaming a service...
 ```
 
-Every 🧠 is a permanent memory. NeuBird carries these forward into every future investigation — no need to repeat yourself.
+Every 🧠 is a permanent memory. NeuBird carries these forward into every future investigation.
 
 ### Four types of persistent memory
 
@@ -255,28 +345,18 @@ Every 🧠 is a permanent memory. NeuBird carries these forward into every futur
 |---|---|---|
 | **Your preferences** | You tell it what to focus on | _"Prioritize Kubernetes-layer evidence first"_ |
 | **Tribal knowledge** | You share facts about your environment | _"Payment service has a known 30s timeout"_ |
-| **SQL patterns** | Automatically saved when queries succeed or fail | _"Never use JOIN on this data source — use separate queries"_ |
+| **SQL patterns** | Automatically saved when queries succeed or fail | _"Never use JOIN on this data source"_ |
 | **Table mappings** | Saved after successful investigations | _"For latency issues, use traces.spans + metrics.http\_duration"_ |
-
-Some of this comes from you. The rest NeuBird figures out on its own by observing which approaches lead to answers and which hit dead ends.
 
 ### It learns from your feedback too
 
-When an investigation completes, NeuBird asks for a 👍 or 👎:
-
-- **👍** — NeuBird records the approach that worked and repeats it
-- **👎** — NeuBird records what to avoid and tries a different path next time
-- **Corrections** — Say _"no, check the deployment history first"_ mid-investigation and NeuBird saves it permanently
-
-Over time, NeuBird stops guessing and goes straight to the services, signals, and investigation patterns that work for _your_ environment. This is how it maintains **92%+ confidence** — it's not just a good model, it's a model that knows your infrastructure.
+When an investigation completes, NeuBird asks for a 👍 or 👎. That feedback shapes future behavior — over time, NeuBird stops guessing and goes straight to the services, signals, and investigation patterns that work for _your_ environment.
 
 ---
 
-## Capabilities
+## More Capabilities
 
 ### Three Agent Personas
-
-Switch investigation styles to match the situation:
 
 | Persona | Model | Best for |
 |---|---|---|
@@ -284,116 +364,26 @@ Switch investigation styles to match the situation:
 | **Analyst** | Claude Sonnet | Root cause analysis, deep multi-source investigation |
 | **Architect** | Claude Opus | Runbooks, design reviews, systemic fixes, capacity planning |
 
-Switch anytime with `/agent`. Each persona brings a different investigation style — Responder is fast and direct, Analyst is thorough and evidence-driven, Architect thinks in systems and long-term patterns.
+Switch anytime with `/agent`.
 
 ### Local CLI Integration
 
-NeuBird automatically detects SRE tools installed on your machine and makes them available as read-only investigation tools:
+NeuBird auto-detects SRE tools on your machine — kubectl, docker, aws, gcloud, az, git, terraform, curl, dig, openssl — and uses them as read-only investigation tools. The agent picks the fastest path: database when data exists there, local CLI when it doesn't.
 
-```text
-💻 Local CLI (9)
-   ✓ kubectl     Kubernetes: pods, services, logs, events, resource usage
-   ✓ docker      Container: ps, inspect, logs, stats, images
-   ✓ aws         AWS CLI: CloudWatch metrics, EC2/ECS describe, S3 list
-   ✓ az          Azure CLI: AKS, Monitor, Log Analytics, resources
-   ✓ git         Git: recent commits, diffs, blame, branch info
-   ✓ curl        HTTP: endpoint health checks, API probing
-   ✓ dig         DNS: resolution checks, record lookups
-   ✓ openssl     TLS/SSL: certificate expiry checks
-   ✓ jq          JSON processing (support tool)
-```
-
-The agent picks the fastest path to an answer — database when the data exists there, local CLI when it doesn't. Ask _"list my EC2 instances"_ and it queries the telemetry database in 2 seconds. Ask _"are my AWS credentials working?"_ and it runs `aws sts get-caller-identity` locally.
-
-All commands are **safety-gated at the code level**. Destructive operations (apply, delete, create, scale, docker run, git push) are blocked regardless of what the LLM requests. NeuBird is read-only by design.
-
-### Tool Inventory
-
-On startup, NeuBird displays every tool available to the agent — grouped by source:
-
-```text
-🔧 Tool inventory (28 tools)
-  📦 Built-in (5)
-     ✓ code_execution           Run code in a sandboxed environment
-     ✓ save_sql_learning        Persist SQL generation rules
-     ...
-  ☁️  ACE MCP (21)
-     ✓ exec_sql                 Execute SQL queries against the database
-     ✓ list_incidents           List detected incidents
-     ✓ external_tool            Interface to external integrations
-     ...
-  💻 Local CLI (9)
-     ✓ kubectl                  Kubernetes: pods, logs, events (read-only)
-     ✓ aws                      AWS CLI: CloudWatch, EC2, S3, IAM
-     ...
-```
-
-Run `/tools` anytime to see the full inventory with capabilities.
-
-### Skills — Custom Investigation Templates
-
-Drop a `.md` file into the skills directory to create reusable investigation playbooks. The filename becomes a slash command, and the content becomes the investigation prompt:
-
-```text
-# ~/.config/neubird/skills/sev-hunt.md
-
-You are investigating a potential SEV. Follow this procedure:
-1. Check for open incidents in the last 4 hours
-2. Query error rates by service for the same window
-3. Correlate with recent deployments
-4. Check pod health and restart counts
-5. Produce a severity assessment with blast radius
-```
-
-Skills loaded from your NeuBird project are also available — managed centrally and shared across your team.
+All commands are **safety-gated at the code level**. Destructive operations are blocked regardless of LLM output.
 
 ### Live Investigation Review
 
-Press `Ctrl+O` **during or after** an investigation to enter tool review mode. Browse every query, every tool call, every result:
-
-- **↑ / ↓** — Navigate between tool calls
-- **Enter** — Expand/collapse to see full data tables
-- **Esc** — Resume watching the investigation
-
-This works mid-investigation — pause to inspect a query result, then resume watching. Every SQL query, kubectl output, and API response is preserved for inspection.
+Press `Ctrl+O` **during or after** an investigation to browse every query and tool result. Expand individual calls to see full data tables. Works mid-investigation — pause, inspect, resume.
 
 ### MCP Extensibility
 
-Extend NeuBird with any [Model Context Protocol](https://modelcontextprotocol.io/) server — local processes or remote HTTP endpoints:
+Extend NeuBird with any [Model Context Protocol](https://modelcontextprotocol.io/) server:
 
 ```sh
-# Add a local MCP server
 neubird mcp add my-server /usr/local/bin/my-mcp-server
-
-# Add a remote HTTP endpoint
 neubird mcp add my-api https://mcp.example.com/mcp --header "Authorization: Bearer ..."
-
-# List configured servers
-neubird mcp list
 ```
-
-MCP tools appear in the tool inventory alongside built-in and local CLI tools, and are available to the agent for every investigation.
-
-### Context-Aware Welcome
-
-On every launch, NeuBird shows rotating example questions tailored to your telemetry — demonstrating capabilities you might not have tried yet:
-
-```text
-  Try asking something like...
-
-  ╭──────────────────────────────────────────────────────────────╮
-  │  🚨 Incident Response                                        │
-  │  Dan is complaining about apps crashing and blaming storage  │
-  │  — what actually happened in the last 2 hours?               │
-  ╰──────────────────────────────────────────────────────────────╯
-  ╭──────────────────────────────────────────────────────────────╮
-  │  💰 Cost & Efficiency                                        │
-  │  Where are we bleeding money on idle compute and high-       │
-  │  cardinality metrics nobody queries?                         │
-  ╰──────────────────────────────────────────────────────────────╯
-```
-
-These are generated using your actual telemetry inventory — not generic prompts.
 
 ---
 
@@ -401,18 +391,25 @@ These are generated using your actual telemetry inventory — not generic prompt
 
 | Command | What it does |
 |---|---|
-| `/health` | Full infrastructure health sweep (default: 1h lookback) |
-| `/health 4h` | Health sweep with custom lookback window |
-| `/cost` | Cloud cost analysis + 24h spend projection |
-| `/agent` | Switch agent persona (Responder / Analyst / Architect) |
-| `/tools` | Show all available tools with capabilities |
-| `/skills` | List available investigation skills |
-| `/tables` | List available telemetry tables |
-| `/mcp` | Show MCP server status |
-| `/project` | Switch database / project |
+| `/health` | Infrastructure health sweep (default: 1h) |
+| `/health 4h` | Health sweep with custom lookback |
+| `/cost` | Cloud cost analysis + 24h projection |
+| `/handoff` | On-call shift briefing |
+| `/changes` | What changed? — compare time windows |
+| `/timeline` | Reconstruct incident timeline |
+| `/pir` | Post-incident review |
+| `/slo` | SLO burn rate check |
+| `/blast-radius` | Map failure blast radius |
+| `/certs` | TLS certificate expiry scan |
+| `/watch` | Background health sweep (every 4h) |
+| `/watch off` | Stop background sweeps |
+| `/agent` | Switch persona |
+| `/tools` | Show all tools with capabilities |
+| `/skills` | List available skills |
+| `/tables` | List telemetry tables |
+| `/mcp` | MCP server status |
+| `/project` | Switch database |
 | `/reset` | Clear conversation history |
-| `/clear` | Clear terminal display |
-| `/tiles` | Show welcome tiles |
 
 Or just type a question in plain English.
 
@@ -422,54 +419,40 @@ Or just type a question in plain English.
 |---|---|
 | `Enter` | Submit question |
 | `Esc` | Cancel investigation / exit mode |
-| `Ctrl+O` | Tool review mode (works mid-investigation) |
-| `↑ / ↓` | Navigate input history / tool calls |
-| `Ctrl+R` | Reverse search through history |
+| `Ctrl+O` | Tool review (works mid-investigation) |
+| `↑ / ↓` | Input history / navigate tool calls |
+| `Ctrl+R` | Reverse search history |
 | `← / →` | Navigate welcome tiles |
 | `Tab` | Accept suggestion / complete command |
 | `?` | Toggle shortcut overlay |
-| `Ctrl+C` (twice) | Quit |
+| `Ctrl+C` ×2 | Quit |
 
 ---
 
 ## What It Connects To
 
-NeuBird integrates with your existing stack through read-only API connections. Nothing to install on your infrastructure.
-
 | Category | Integrations |
 |---|---|
 | **Monitoring** | Datadog, Splunk, Dynatrace, Grafana, Prometheus, New Relic, CloudWatch |
-| **Incident Management** | PagerDuty, OpsGenie, FireHydrant, ServiceNow |
+| **Incidents** | PagerDuty, OpsGenie, FireHydrant, ServiceNow |
 | **Cloud** | AWS, Azure, GCP |
 | **Traces** | Grafana Tempo, Jaeger, OpenTelemetry |
-| **CI/CD & Code** | GitHub, GitLab, ArgoCD, Jenkins |
+| **CI/CD** | GitHub, GitLab, ArgoCD, Jenkins |
 | **Communication** | Slack, Jira, Confluence |
-| **Data Warehouses** | Snowflake, BigQuery, Redshift |
+| **Data** | Snowflake, BigQuery, Redshift |
 | **IaC** | Terraform, Pulumi, Ansible, Helm, Crossplane |
-| **Local CLI** | kubectl, helm, docker, AWS CLI, gcloud, Azure CLI, git, terraform, curl, dig, openssl |
+| **Local CLI** | kubectl, helm, docker, aws, gcloud, az, git, terraform, curl, dig, openssl |
 
 ---
 
 ## Security
 
-NeuBird is built for enterprises that take security seriously.
-
 - **SOC 2 Type II certified**
-- **Zero data persistence** — telemetry is processed in memory and purged after each session
-- **Read-only by design** — NeuBird never modifies your infrastructure. Local CLI tools are safety-gated at the code level: destructive operations are blocked regardless of LLM output
+- **Zero data persistence** — telemetry processed in memory, purged after each session
+- **Read-only by design** — NeuBird never modifies your infrastructure. Local CLI safety-gated at the code level
 - **Your data is never used to train models**
 - **VPC deployment available** for regulated environments
 - **SSO/SAML, RBAC, and full audit trails**
-
----
-
-## Who It's For
-
-**SRE / IT Ops** — Cut MTTR from hours to minutes. Get root cause analysis backed by evidence from every telemetry source, not guesswork.
-
-**DevOps / Platform Engineering** — Proactive health sweeps, cost optimization, deployment risk assessment, and capacity planning — all from your terminal.
-
-**Engineering Leadership** — Evidence-backed health reports and cost projections on demand. Every claim links to the data source that produced it.
 
 ---
 
@@ -492,7 +475,7 @@ brew install neubirdai/tap/neubird
 neubird
 ```
 
-Questions? Reach us at [neubird.ai](https://neubird.ai) or open an issue in this repo.
+Questions? Reach us at [neubird.ai](https://neubird.ai) or open an issue.
 
 ---
 
