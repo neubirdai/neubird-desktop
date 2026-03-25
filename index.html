@@ -635,6 +635,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#server-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Server API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sentinel-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sentinel API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#documentation" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1572,6 +1600,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#server-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Server API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sentinel-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sentinel API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#documentation" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1728,16 +1784,32 @@
 <pre><code class="language-bash">cp skills/*.md ~/.config/neubird/skills/
 </code></pre>
 <p>NeuBird advertises available skills on the welcome screen so you always know what's possible — no memorization required.</p>
-<p><strong>Watch mode</strong> — Run <code>/watch</code> to enable periodic background health sweeps. NeuBird runs a health assessment on a timer (default: every 4 hours), compares against the previous sweep, and only interrupts you when something <strong>changed</strong>:</p>
-<pre><code class="language-text">&gt; /watch 2h
-  👁️ Watch mode enabled — sweeping every 2h. First sweep starting now...
+<p><strong>Sentinel mode</strong> — Run <code>/sentinel</code> to activate continuous background monitoring. NeuBird's sentinel polls for new alerts every 5 minutes and runs full health sweeps every hour. It surfaces actionable findings as they appear — not on a dumb timer, but by detecting real changes in your telemetry:</p>
+<pre><code class="language-text">&gt; /sentinel
+  🛡️ Sentinel active — polling every 5m0s, full sweep every 1h0m0s.
+  Type /sentinel status to see findings, /sentinel off to stop.
 
-  👁️ Watch sweep — 16:30 (changes detected)
-  🔴 Bad — Active Problems
-     payment-service error rate increased from 0.1% to 2.4% since last sweep
-     ...
+  🛡️ Sentinel: 2 new finding(s) detected — type /sentinel status to review
+
+&gt; /sentinel status
+  🛡️ Sentinel Status
+  Running  · Polls every 5m0s · Sweeps every 1h0m0s
+  Last poll: 14:35:12 · Last sweep: 14:30:00
+  Active findings: 3
+
+  🔴 payment-service error rate spike ✨
+     Error rate jumped from 0.1% to 3.2% in the last 15 minutes
+     → Investigate payment-service error rate spike and correlate with recent deploys
+
+  🟡 auth-service connection pool at 82% ✨
+     Connection pool utilization trending toward saturation
+     → Check auth-service connection pool usage and project when it hits the limit
+
+  🔵 Upcoming cert expiry: api.example.com
+     TLS certificate expires in 12 days
+     → Scan TLS certificates and identify renewal schedule
 </code></pre>
-<p>When nothing changed, you get a quiet one-liner. When something meaningful shifts, you get the full report. Use <code>/watch off</code> to disable.</p>
+<p>Use <code>/sentinel off</code> to stop. The sentinel runs in the background — you can investigate other things while it monitors.</p>
 <p><strong>MCP tool support</strong> — Extend NeuBird with Model Context Protocol servers for additional data sources and capabilities beyond SQL.</p>
 <h2 id="installation">Installation</h2>
 <h3 id="macos-linux-homebrew">macOS / Linux (Homebrew)</h3>
@@ -1837,12 +1909,16 @@ neubird --assess
 <td>TLS certificate expiry scan</td>
 </tr>
 <tr>
-<td><code>/watch</code></td>
-<td>Background health sweep (every 4h)</td>
+<td><code>/sentinel</code></td>
+<td>Start sentinel mode — continuous alert monitoring</td>
 </tr>
 <tr>
-<td><code>/watch off</code></td>
-<td>Stop background sweeps</td>
+<td><code>/sentinel status</code></td>
+<td>Show sentinel findings</td>
+</tr>
+<tr>
+<td><code>/sentinel off</code></td>
+<td>Stop sentinel</td>
 </tr>
 <tr>
 <td><code>/agent</code></td>
@@ -1922,6 +1998,88 @@ neubird --assess
 <p><strong>Data Warehouses</strong> — Snowflake, BigQuery, Redshift</p>
 <p><strong>And more</strong> — Jira, Confluence, Slack, Kubernetes, custom FDW plugins</p>
 <p><strong>Local CLI tools</strong> (auto-detected on your machine) — kubectl, helm, docker/podman, AWS CLI, gcloud, Azure CLI, git, terraform, curl, dig, openssl</p>
+<h2 id="server-api">Server API</h2>
+<p>When running in server mode (<code>neubird serve</code>), Falcon exposes a REST API for programmatic access:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/health</code></td>
+<td>Server health check</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/v1/infer</code></td>
+<td>Run an investigation (SSE streaming)</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/v1/tools?session_id=...</code></td>
+<td>List available tools for a session</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/v1/skills</code></td>
+<td>List available investigation skills</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/v1/sentinel/start</code></td>
+<td>Start sentinel mode</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/v1/sentinel/stop</code></td>
+<td>Stop sentinel mode</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/v1/sentinel/status</code></td>
+<td>Sentinel status and config</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/v1/sentinel/findings</code></td>
+<td>Current sentinel findings</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/v1/sessions/reset</code></td>
+<td>Reset conversation history</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/v1/sessions/delete</code></td>
+<td>Delete a session</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/v1/sessions/feedback</code></td>
+<td>Submit rating or insight</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sentinel-api">Sentinel API</h3>
+<p>Start sentinel monitoring via the API:</p>
+<pre><code class="language-bash"># Start sentinel with custom intervals
+curl -X POST http://localhost:8080/v1/sentinel/start \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;poll_interval&quot;: &quot;5m&quot;, &quot;sweep_interval&quot;: &quot;30m&quot;, &quot;project_uuid&quot;: &quot;your-project-id&quot;}'
+
+# Check findings
+curl http://localhost:8080/v1/sentinel/findings
+
+# Stop sentinel
+curl -X POST http://localhost:8080/v1/sentinel/stop
+</code></pre>
+<p>All endpoints require the <code>X-Desktop-Secret</code> header when <code>DESKTOP_SECRET</code> is set.</p>
 <h2 id="documentation">Documentation</h2>
 <p>Full documentation is available at <a href="https://neubirdai.github.io/neubird-desktop/">neubirdai.github.io/neubird-desktop</a>.</p>
 <h2 id="license">License</h2>
