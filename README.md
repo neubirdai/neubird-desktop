@@ -368,9 +368,20 @@ Switch anytime with `/agent`.
 
 ### Local CLI Integration
 
-NeuBird auto-detects SRE tools on your machine — kubectl, docker, aws, gcloud, az, git, terraform, curl, dig, openssl — and uses them as read-only investigation tools. The agent picks the fastest path: database when data exists there, local CLI when it doesn't.
+NeuBird can use kubectl on your machine as a read-only investigation tool. The agent picks the fastest path: database when data exists there, local CLI when it doesn't.
 
 All commands are **safety-gated at the code level**. Destructive operations are blocked regardless of LLM output.
+
+#### Enabling Local Tools
+
+To enable local tools such as `kubectl`, set the following environment variable before launching NeuBird:
+
+```sh
+export HAWKEYE_LOCAL_TOOLS=true
+neubird
+```
+
+When enabled, NeuBird gains access to `kubectl` as a local tool, restricted to **read-only operations** only. This lets the agent query your Kubernetes clusters directly — inspecting pods, services, logs, events, and more — without any risk of modifying cluster state.
 
 ### Live Investigation Review
 
@@ -441,7 +452,7 @@ Or just type a question in plain English.
 | **Communication** | Slack, Jira, Confluence |
 | **Data** | Snowflake, BigQuery, Redshift |
 | **IaC** | Terraform, Pulumi, Ansible, Helm, Crossplane |
-| **Local CLI** | kubectl, helm, docker, aws, gcloud, az, git, terraform, curl, dig, openssl |
+| **Local CLI** | kubectl |
 
 ---
 
