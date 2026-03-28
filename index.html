@@ -657,6 +657,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#sse-event-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SSE Event Types
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1622,6 +1633,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#sse-event-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SSE Event Types
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1724,6 +1746,7 @@
 </table>
 <p><strong>Collapsible tool output</strong> — Press <code>Ctrl+O</code> to review every tool call and result from an investigation — even while it's still running. Expand individual calls to inspect full data tables, or collapse them to focus on the analysis. Works mid-investigation: pause to browse results, then press <code>Esc</code> to resume watching.</p>
 <p><strong>Local CLI integration</strong> — NeuBird automatically detects SRE tools on your machine (kubectl, docker, aws, gcloud, helm, git, terraform, curl, dig, openssl) and makes them available to the AI agent as read-only tools. Ask "how many pods are in the production namespace?" and NeuBird will run <code>kubectl get pods</code> directly. All commands are safety-gated — destructive operations (apply, delete, create, scale) are blocked at the code level.</p>
+<p><strong>Web search</strong> — When an investigation requires context beyond your telemetry — CVE details, vendor status pages, documentation, or recent outage reports — NeuBird can search the web for supporting evidence. Web search is enabled by default and integrates naturally into investigations alongside SQL queries and local CLI tools.</p>
 <p><strong>Tool inventory</strong> — On startup, NeuBird displays every tool available to the agent — grouped by source (built-in, cloud MCP, local CLI). Run <code>/tools</code> anytime to see the full inventory with capabilities. Example:</p>
 <pre><code>🔧 Tool inventory (18 tools)
   📦 Built-in (12)
@@ -1741,6 +1764,18 @@
 </code></pre>
 <p><strong>Persistent learning</strong> — NeuBird remembers which queries work with your data sources and which telemetry tables matter for each type of investigation. It gets faster and more accurate over time.</p>
 <p><strong>Custom slash commands</strong> — Drop a <code>.md</code> file into the <code>skills/</code> directory to create custom investigation templates. The filename becomes the command, and the content becomes the prompt.</p>
+<p><strong>Export and share</strong> — Use <code>/export</code> to save any investigation as a file or copy it to your clipboard. An interactive picker lets you choose format (plain text, markdown, or PDF) and scope (last answer or full conversation). Or go direct: <code>/export pdf</code>, <code>/export full md</code>, <code>/export clipboard</code>. PDF exports include the NeuBird logo, formatted tables, and proper section headings. Use <code>/copy</code> as a shortcut to copy the last answer to your clipboard instantly.</p>
+<p><strong>Branded PDF reports</strong> — RCA investigations, health sweeps, and cost analyses automatically generate branded PDF reports saved to <code>~/.config/neubird/reports/</code>. Each report includes the NeuBird logo, confidence score, data sources, investigation timeline, and structured findings with evidence tables and action items.</p>
+<p><strong>Live investigation dashboard</strong> — While an investigation runs, three progress bars update in real time:</p>
+<pre><code class="language-text">  ██████████████████████████████████░░░░░░ 85% wrapping up · turn 15 · 22 tools • 52.3s
+  ████████████████████░░░░░░░░░░░░░░░░░░░░ 50% confidence
+  ████████████████████████░░░░░░░░░░░░░░░░ 2.4 MB · 1,247 rows · 8 queries      (Ctrl+C)
+</code></pre>
+<p>The first bar tracks investigation progress. The second shows the AI's self-reported confidence (can go down — that's useful signal). The third shows cumulative telemetry data read from SQL queries on a logarithmic scale. On completion, a summary line shows the final stats:</p>
+<pre><code class="language-text">  ──────────────────────────────────────────────────────────────────────────
+  ✅ completed in 3m52.1s · 17 turns · 21 tools · 80% confidence · 49.4 KB read
+  📊 Data sources: config_aws_prod.aws_elbv2_target_groups, metric_aws_prod.rds_cpu
+</code></pre>
 <p><strong>Built-in investigation skills</strong> — NeuBird ships with ready-to-use playbooks for the most common SRE workflows:</p>
 <table>
 <thead>
@@ -1921,8 +1956,28 @@ neubird --assess
 <td>Stop sentinel</td>
 </tr>
 <tr>
+<td><code>/export</code></td>
+<td>Export answer — interactive picker (txt/md/pdf, file/clipboard)</td>
+</tr>
+<tr>
+<td><code>/export pdf</code></td>
+<td>Export directly as PDF</td>
+</tr>
+<tr>
+<td><code>/export full md</code></td>
+<td>Export full conversation as markdown</td>
+</tr>
+<tr>
+<td><code>/copy</code></td>
+<td>Copy last answer to clipboard</td>
+</tr>
+<tr>
 <td><code>/agent</code></td>
 <td>Switch agent persona</td>
+</tr>
+<tr>
+<td><code>/welcome</code></td>
+<td>Show the welcome screen</td>
 </tr>
 <tr>
 <td><code>/tables</code></td>
@@ -1935,6 +1990,18 @@ neubird --assess
 <tr>
 <td><code>/project</code></td>
 <td>Switch database</td>
+</tr>
+<tr>
+<td><code>/config</code></td>
+<td>Show current connection and saved state</td>
+</tr>
+<tr>
+<td><code>/mcp</code></td>
+<td>Show MCP server status</td>
+</tr>
+<tr>
+<td><code>/clear</code></td>
+<td>Clear display (keeps AI context)</td>
 </tr>
 <tr>
 <td><code>/reset</code></td>
@@ -1964,6 +2031,10 @@ neubird --assess
 <td>Toggle tool output review (works mid-investigation)</td>
 </tr>
 <tr>
+<td><code>Ctrl+T</code></td>
+<td>Tool navigation mode — browse individual tool calls</td>
+</tr>
+<tr>
 <td><code>↑ / ↓</code></td>
 <td>Navigate input history</td>
 </tr>
@@ -1973,7 +2044,7 @@ neubird --assess
 </tr>
 <tr>
 <td><code>← / →</code></td>
-<td>Navigate welcome tiles</td>
+<td>Navigate welcome screen</td>
 </tr>
 <tr>
 <td><code>Tab</code></td>
@@ -2080,6 +2151,66 @@ curl http://localhost:8080/v1/sentinel/findings
 curl -X POST http://localhost:8080/v1/sentinel/stop
 </code></pre>
 <p>All endpoints require the <code>X-Desktop-Secret</code> header when <code>DESKTOP_SECRET</code> is set.</p>
+<h3 id="sse-event-types">SSE Event Types</h3>
+<p>The <code>/v1/infer</code> endpoint streams Server-Sent Events. Each event is a JSON object with a <code>type</code> field:</p>
+<table>
+<thead>
+<tr>
+<th>Event Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td>Streamed text chunk (investigation narration)</td>
+</tr>
+<tr>
+<td><code>tool_start</code></td>
+<td>Agent begins executing a tool</td>
+</tr>
+<tr>
+<td><code>tool_done</code></td>
+<td>Tool execution completed</td>
+</tr>
+<tr>
+<td><code>tool_data</code></td>
+<td>Raw structured data from a data-producing tool (for charts/tables)</td>
+</tr>
+<tr>
+<td><code>data_read</code></td>
+<td>Cumulative telemetry data volume (bytes, rows, queries from exec_sql)</td>
+</tr>
+<tr>
+<td><code>progress</code></td>
+<td>Investigation progress percentage, phase, and confidence</td>
+</tr>
+<tr>
+<td><code>turn</code></td>
+<td>LLM iteration number</td>
+</tr>
+<tr>
+<td><code>sources</code></td>
+<td>Data sources used in the investigation</td>
+</tr>
+<tr>
+<td><code>session_metadata</code></td>
+<td>Running investigation metadata (cost, timing, actions)</td>
+</tr>
+<tr>
+<td><code>health_report</code></td>
+<td>Structured health/cost report text</td>
+</tr>
+<tr>
+<td><code>rating_request</code></td>
+<td>Signal to show a rating prompt</td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td>Non-recoverable error</td>
+</tr>
+</tbody>
+</table>
 <h2 id="documentation">Documentation</h2>
 <p>Full documentation is available at <a href="https://neubirdai.github.io/neubird-desktop/">neubirdai.github.io/neubird-desktop</a>.</p>
 <h2 id="license">License</h2>
