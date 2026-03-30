@@ -971,6 +971,45 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Built-in commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#investigation-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Investigation &amp; analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-connections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment &amp; connections
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output &amp; session
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -978,6 +1017,17 @@
     <span class="md-ellipsis">
       
         Custom slash commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#managing-skills" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Managing skills
       
     </span>
   </a>
@@ -1217,6 +1267,45 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Built-in commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#investigation-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Investigation &amp; analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-connections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment &amp; connections
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output &amp; session
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1224,6 +1313,17 @@
     <span class="md-ellipsis">
       
         Custom slash commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#managing-skills" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Managing skills
       
     </span>
   </a>
@@ -1257,6 +1357,7 @@
 
 <hr />
 <h2 id="built-in-commands">Built-in commands</h2>
+<h3 id="investigation-analysis">Investigation &amp; analysis</h3>
 <table>
 <thead>
 <tr>
@@ -1282,8 +1383,31 @@
 <td>Cost analysis with a custom lookback window. Example: <code>/cost 7d</code></td>
 </tr>
 <tr>
+<td><code>/sentinel</code></td>
+<td>Start sentinel mode — continuous background alert monitoring.</td>
+</tr>
+<tr>
+<td><code>/sentinel off</code></td>
+<td>Stop sentinel mode.</td>
+</tr>
+<tr>
+<td><code>/sentinel status</code></td>
+<td>Show sentinel status and active findings.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="environment-connections">Environment &amp; connections</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
 <td><code>/agent</code></td>
-<td>Switch Falcon agent persona. Opens an interactive picker.</td>
+<td>Switch SRE agent persona. Opens an interactive picker.</td>
 </tr>
 <tr>
 <td><code>/tables</code></td>
@@ -1296,6 +1420,57 @@
 <tr>
 <td><code>/reconnect</code></td>
 <td>Change the connected Kubernetes namespace or service.</td>
+</tr>
+<tr>
+<td><code>/config</code></td>
+<td>Show current connection info.</td>
+</tr>
+<tr>
+<td><code>/config clear</code></td>
+<td>Clear saved connection selections.</td>
+</tr>
+<tr>
+<td><code>/mcp</code></td>
+<td>Show MCP server status.</td>
+</tr>
+<tr>
+<td><code>/tools</code></td>
+<td>Show all available tools.</td>
+</tr>
+<tr>
+<td><code>/learnings</code></td>
+<td>Show SQL learnings from past investigations.</td>
+</tr>
+<tr>
+<td><code>/skills</code></td>
+<td>List available skills (built-in and installed).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="output-session">Output &amp; session</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/export</code></td>
+<td>Export the current answer (interactive format picker).</td>
+</tr>
+<tr>
+<td><code>/copy</code></td>
+<td>Copy the current answer to clipboard.</td>
+</tr>
+<tr>
+<td><code>/welcome</code></td>
+<td>Show the welcome screen with investigation tiles.</td>
+</tr>
+<tr>
+<td><code>/help</code></td>
+<td>Show help.</td>
 </tr>
 <tr>
 <td><code>/reset</code></td>
@@ -1321,6 +1496,36 @@
 Review the last 48 hours of telemetry and summarize any anomalies or incidents that occurred over the weekend.
 </code></pre>
 <p>This makes <code>/weekend-check</code> available as a slash command.</p>
+<hr />
+<h2 id="managing-skills">Managing skills</h2>
+<p>NeuBird Desktop can install skills from the <a href="https://github.com/neubirdai/falconclaw-skills">FalconClaw skills registry</a>. Use the <code>neubird skills</code> CLI to browse and manage them.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>neubird skills list</code></td>
+<td>List installed skills.</td>
+</tr>
+<tr>
+<td><code>neubird skills search &lt;query&gt;</code></td>
+<td>Search the skills registry.</td>
+</tr>
+<tr>
+<td><code>neubird skills install &lt;name&gt;</code></td>
+<td>Install a skill from the registry.</td>
+</tr>
+<tr>
+<td><code>neubird skills remove &lt;name&gt;</code></td>
+<td>Remove an installed skill.</td>
+</tr>
+</tbody>
+</table>
+<p>Installed skills are stored in <code>~/.config/neubird/skills/</code> and are automatically available as slash commands.</p>
 
 
 
