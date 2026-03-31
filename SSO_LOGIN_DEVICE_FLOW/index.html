@@ -1601,7 +1601,7 @@ export OAUTH_CLIENT_ID=&quot;falcon-cli&quot;                  # Optional, defau
 <li>Return to terminal - login complete!</li>
 </ol>
 <p><strong>Example output:</strong></p>
-<pre><code>🔐 Authenticating with Raven via SSO
+<pre><code class="language-text">🔐 Authenticating with Raven via SSO
    Raven URL: https://bao.app.neubird.ai
    Auth0 Domain: neubird.us.auth0.com
    Organization: 73711cf7-89c7-44d1-9fce-xxxxxxxxxxxx
@@ -1673,7 +1673,7 @@ export OAUTH_CLIENT_ID=&quot;falcon-cli&quot;                  # Optional, defau
 </ol>
 <h2 id="how-it-works">How It Works</h2>
 <h3 id="device-flow-sequence">Device Flow Sequence</h3>
-<pre><code>┌─────────┐                 ┌──────────┐                 ┌─────────┐
+<pre><code class="language-text">┌─────────┐                 ┌──────────┐                 ┌─────────┐
 │  Falcon │                 │  Browser │                 │  Auth0  │
 │   CLI   │                 │          │                 │         │
 └────┬────┘                 └────┬─────┘                 └────┬────┘
@@ -1758,20 +1758,26 @@ export OAUTH_CLIENT_ID=&quot;falcon-cli&quot;                  # Optional, defau
 <h3 id="application-settings">Application Settings</h3>
 <p>Your Auth0 application must be configured as follows:</p>
 <p><strong>Application Type:</strong> Native (or Single Page Application)</p>
-<p><strong>Grant Types:</strong>
-- ✅ Device Code (required)
-- ✅ Refresh Token (recommended)</p>
+<p><strong>Grant Types:</strong></p>
+<ul>
+<li>✅ Device Code (required)</li>
+<li>✅ Refresh Token (recommended)</li>
+</ul>
 <p><strong>Token Endpoint Authentication:</strong> None (public client)</p>
-<p><strong>Organization Settings:</strong>
-- Organization must be configured in Auth0
-- Enterprise connection (Ping, Okta, Azure) enabled for the organization
-- Organization "name" field should match Raven org UUID</p>
+<p><strong>Organization Settings:</strong></p>
+<ul>
+<li>Organization must be configured in Auth0</li>
+<li>Enterprise connection (Ping, Okta, Azure) enabled for the organization</li>
+<li>Organization "name" field should match Raven org UUID</li>
+</ul>
 <h3 id="api-permissions">API Permissions</h3>
-<p>The application needs these scopes:
-- <code>openid</code> - Basic authentication
-- <code>profile</code> - User profile information
-- <code>email</code> - User email address
-- <code>offline_access</code> - Refresh tokens for long-lived sessions</p>
+<p>The application needs these scopes:</p>
+<ul>
+<li><code>openid</code> - Basic authentication</li>
+<li><code>profile</code> - User profile information</li>
+<li><code>email</code> - User email address</li>
+<li><code>offline_access</code> - Refresh tokens for long-lived sessions</li>
+</ul>
 <h2 id="token-management">Token Management</h2>
 <h3 id="token-storage">Token Storage</h3>
 <p>Tokens are stored in <code>~/.config/neubird/neubird.json</code>:</p>
@@ -1804,32 +1810,42 @@ newToken, err := client.RefreshToken(ctx, refreshToken)
 <p>Get your org UUID from your administrator or Raven web UI.</p>
 <h3 id="device-code-request-failed">"device code request failed"</h3>
 <p><strong>Problem:</strong> Auth0 configuration issue or network error.</p>
-<p><strong>Solution:</strong>
-1. Verify <code>AUTH0_DOMAIN</code> is correct
-2. Check network connectivity to Auth0
-3. Verify Auth0 application has Device Flow enabled
-4. Check Auth0 application logs for errors</p>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>Verify <code>AUTH0_DOMAIN</code> is correct</li>
+<li>Check network connectivity to Auth0</li>
+<li>Verify Auth0 application has Device Flow enabled</li>
+<li>Check Auth0 application logs for errors</li>
+</ol>
 <h3 id="authentication-timeout">"authentication timeout"</h3>
 <p><strong>Problem:</strong> User didn't complete authentication within the time limit (usually 15 minutes).</p>
-<p><strong>Solution:</strong>
-- Run the login command again
-- Complete authentication more quickly
-- Check if your SSO provider is responding</p>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Run the login command again</li>
+<li>Complete authentication more quickly</li>
+<li>Check if your SSO provider is responding</li>
+</ul>
 <h3 id="user-denied-authorization">"user denied authorization"</h3>
 <p><strong>Problem:</strong> User clicked "Deny" in the browser.</p>
-<p><strong>Solution:</strong>
-- Run the login command again
-- Click "Allow" when prompted</p>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Run the login command again</li>
+<li>Click "Allow" when prompted</li>
+</ul>
 <h3 id="authentication-failed-invalid_grant">"authentication failed: invalid_grant"</h3>
 <p><strong>Problem:</strong> Device code expired or already used.</p>
-<p><strong>Solution:</strong>
-- Run the login command again to get a new device code</p>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Run the login command again to get a new device code</li>
+</ul>
 <h3 id="browser-doesnt-open-automatically">Browser doesn't open automatically</h3>
 <p><strong>Problem:</strong> Browser opening failed (common in SSH sessions).</p>
-<p><strong>Solution:</strong>
-- Copy the URL manually from the terminal
-- Paste it into your browser
-- Enter the user code when prompted</p>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Copy the URL manually from the terminal</li>
+<li>Paste it into your browser</li>
+<li>Enter the user code when prompted</li>
+</ul>
 <h2 id="security-considerations">Security Considerations</h2>
 <p>✅ <strong>No credentials in CLI</strong> - Username/password never stored<br />
 ✅ <strong>Tokens encrypted at rest</strong> - File permissions <code>0600</code><br />
