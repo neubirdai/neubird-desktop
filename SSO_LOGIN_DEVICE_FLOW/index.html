@@ -1587,9 +1587,11 @@
 export AUTH0_ORG_ID=&quot;73711cf7-89c7-44d1-9fce-xxx&quot;   # Your organization UUID
 export AUTH0_AUDIENCE=&quot;neubird-api&quot;                  # Optional, defaults to &quot;neubird-api&quot;
 export OAUTH_CLIENT_ID=&quot;falcon-cli&quot;                  # Optional, defaults to &quot;falcon-cli&quot;
+
 </code></pre>
 <h3 id="login">Login</h3>
 <pre><code class="language-bash">neubird login https://myenv.app.neubird.ai --sso
+
 </code></pre>
 <p><strong>What happens:</strong></p>
 <ol>
@@ -1625,6 +1627,7 @@ export OAUTH_CLIENT_ID=&quot;falcon-cli&quot;                  # Optional, defau
    Expires: 24 hours
 
 ✓ Login successful!
+
 </code></pre>
 <h2 id="configuration">Configuration</h2>
 <h3 id="environment-variables">Environment Variables</h3>
@@ -1721,6 +1724,7 @@ export OAUTH_CLIENT_ID=&quot;falcon-cli&quot;                  # Optional, defau
      │                           │                            │
      │ 14. Save to ~/.config/neubird/neubird.json             │
      │                           │                            │
+
 </code></pre>
 <h3 id="key-components">Key Components</h3>
 <ol>
@@ -1789,6 +1793,7 @@ export OAUTH_CLIENT_ID=&quot;falcon-cli&quot;                  # Optional, defau
   &quot;org_uuid&quot;: &quot;73711cf7-89c7-44d1-9fce-xxxxxxxxxxxx&quot;,
   &quot;profile&quot;: &quot;default&quot;
 }
+
 </code></pre>
 <h3 id="token-expiration">Token Expiration</h3>
 <ul>
@@ -1800,12 +1805,14 @@ export OAUTH_CLIENT_ID=&quot;falcon-cli&quot;                  # Optional, defau
 <p>The Device Flow client includes automatic token refresh:</p>
 <pre><code class="language-go">client := oauth.NewDeviceFlowClient(auth0Domain, &quot;&quot;, &quot;&quot;)
 newToken, err := client.RefreshToken(ctx, refreshToken)
+
 </code></pre>
 <h2 id="troubleshooting">Troubleshooting</h2>
 <h3 id="auth0_org_id-environment-variable-is-required">"AUTH0_ORG_ID environment variable is required"</h3>
 <p><strong>Problem:</strong> Organization ID not configured.</p>
 <p><strong>Solution:</strong></p>
 <pre><code class="language-bash">export AUTH0_ORG_ID=&quot;your-org-uuid-here&quot;
+
 </code></pre>
 <p>Get your org UUID from your administrator or Raven web UI.</p>
 <h3 id="device-code-request-failed">"device code request failed"</h3>
@@ -1901,6 +1908,7 @@ newToken, err := client.RefreshToken(ctx, refreshToken)
 export AUTH0_ORG_ID=&quot;73711cf7-89c7-44d1-9fce-xxxxxxxxxxxx&quot;
 
 neubird login https://myenv.app.neubird.ai --sso
+
 </code></pre>
 <h3 id="custom-auth0-configuration">Custom Auth0 Configuration</h3>
 <pre><code class="language-bash">export AUTH0_DOMAIN=&quot;custom-tenant.auth0.com&quot;
@@ -1909,6 +1917,7 @@ export AUTH0_AUDIENCE=&quot;custom-api&quot;
 export OAUTH_CLIENT_ID=&quot;my-client-id&quot;
 
 neubird login https://myenv.app.neubird.ai --sso
+
 </code></pre>
 <h3 id="sshheadless-environment">SSH/Headless Environment</h3>
 <pre><code class="language-bash"># In SSH session where browser can't open
@@ -1918,6 +1927,7 @@ neubird login https://myenv.app.neubird.ai --sso
 # Open it in your local browser
 # Enter the code shown in terminal
 # Return to SSH session - authentication complete!
+
 </code></pre>
 <h2 id="files-modified">Files Modified</h2>
 <ul>
@@ -1928,12 +1938,14 @@ neubird login https://myenv.app.neubird.ai --sso
 <li><code>internal/config/credentials.go</code> - Credentials storage (existing)</li>
 </ul>
 <h2 id="dependencies">Dependencies</h2>
-<p>No new external dependencies! All implementation uses Go standard library:
-- <code>context</code> - Context management
-- <code>encoding/json</code> - JSON encoding/decoding
-- <code>net/http</code> - HTTP client
-- <code>net/url</code> - URL encoding
-- <code>time</code> - Time management</p>
+<p>No new external dependencies! All implementation uses Go standard library:</p>
+<ul>
+<li><code>context</code> - Context management</li>
+<li><code>encoding/json</code> - JSON encoding/decoding</li>
+<li><code>net/http</code> - HTTP client</li>
+<li><code>net/url</code> - URL encoding</li>
+<li><code>time</code> - Time management</li>
+</ul>
 <h2 id="future-enhancements">Future Enhancements</h2>
 <ol>
 <li><strong>Automatic token refresh</strong> - Refresh tokens before they expire</li>
@@ -1943,11 +1955,13 @@ neubird login https://myenv.app.neubird.ai --sso
 <li><strong>Custom browser</strong> - Support for custom browser commands</li>
 </ol>
 <h2 id="support">Support</h2>
-<p>For issues or questions:
-1. Check this troubleshooting guide
-2. Review Auth0 application configuration
-3. Check Auth0 logs for authentication errors
-4. Contact your system administrator for SSO-related issues</p>
+<p>For issues or questions:</p>
+<ol>
+<li>Check this troubleshooting guide</li>
+<li>Review Auth0 application configuration</li>
+<li>Check Auth0 logs for authentication errors</li>
+<li>Contact your system administrator for SSO-related issues</li>
+</ol>
 <h2 id="references">References</h2>
 <ul>
 <li><a href="https://tools.ietf.org/html/rfc8628">OAuth 2.0 Device Authorization Grant (RFC 8628)</a></li>

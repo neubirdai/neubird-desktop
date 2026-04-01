@@ -1460,18 +1460,22 @@ neubird login https://myenv.app.neubird.ai
 
 # Legacy password login still works
 neubird login https://myenv.app.neubird.ai -u user@company.com -p password
+
 </code></pre>
 <h3 id="interactive-tui">Interactive TUI</h3>
-<p>When the TUI login screen appears:
-1. Enter the NeuBird URL
-2. Press <code>S</code> to trigger SSO login
-3. Browser opens automatically
-4. Complete authentication in browser
-5. Return to terminal - login complete!</p>
+<p>When the TUI login screen appears:</p>
+<ol>
+<li>Enter the NeuBird URL</li>
+<li>Press <code>S</code> to trigger SSO login</li>
+<li>Browser opens automatically</li>
+<li>Complete authentication in browser</li>
+<li>Return to terminal - login complete!</li>
+</ol>
 <h2 id="configuration">Configuration</h2>
 <h3 id="client-id">Client ID</h3>
 <p>The OAuth client ID can be configured via environment variable:</p>
 <pre><code class="language-bash">export OAUTH_CLIENT_ID=&quot;my-custom-client-id&quot;
+
 </code></pre>
 <p>Default: <code>falcon-cli</code></p>
 <h3 id="backend-endpoints">Backend Endpoints</h3>
@@ -1488,7 +1492,7 @@ neubird login https://myenv.app.neubird.ai -u user@company.com -p password
 ✅ <strong>Timeout protection</strong> - 5-minute timeout on callback server<br />
 ✅ <strong>State parameter</strong> - CSRF protection (can be added if needed)</p>
 <h2 id="flow-diagram">Flow Diagram</h2>
-<pre><code>┌─────────┐                 ┌──────────┐                 ┌─────────┐
+<pre><code class="language-text">┌─────────┐                 ┌──────────┐                 ┌─────────┐
 │  Falcon │                 │  Browser │                 │  Raven  │
 │   CLI   │                 │          │                 │ Backend │
 └────┬────┘                 └────┬─────┘                 └────┬────┘
@@ -1532,19 +1536,23 @@ neubird login https://myenv.app.neubird.ai -u user@company.com -p password
      │ 11. Save credentials      │                            │
      │     to ~/.config/neubird/ │                            │
      │                           │                            │
+
 </code></pre>
 <h2 id="token-refresh">Token Refresh</h2>
 <p>The OAuth client includes a <code>RefreshToken()</code> method for obtaining new access tokens:</p>
 <pre><code class="language-go">client := oauth.NewClient(ravenURL, &quot;&quot;)
 newToken, err := client.RefreshToken(ctx, refreshToken)
+
 </code></pre>
 <p>This can be integrated into the main application to automatically refresh expired tokens.</p>
 <h2 id="testing">Testing</h2>
 <h3 id="manual-testing">Manual Testing</h3>
 <ol>
-<li><strong>Happy path</strong>:
-   <code>bash
-   neubird login https://myenv.app.neubird.ai --sso</code></li>
+<li><strong>Happy path</strong>:</li>
+</ol>
+<p><code>bash
+   neubird login https://myenv.app.neubird.ai --sso</code></p>
+<ul>
 <li>Browser should open</li>
 <li>Complete SSO login</li>
 <li>Return to terminal</li>
@@ -1566,7 +1574,7 @@ newToken, err := client.RefreshToken(ctx, refreshToken)
 <li>Run <code>neubird</code> without credentials</li>
 <li>Press <code>S</code> for SSO</li>
 <li>Verify browser opens and flow completes</li>
-</ol>
+</ul>
 <h3 id="integration-testing">Integration Testing</h3>
 <p>The OAuth client can be tested against a mock OAuth server:</p>
 <pre><code class="language-go">// Start mock server
@@ -1590,6 +1598,7 @@ defer server.Close()
 // Test OAuth flow
 client := oauth.NewClient(server.URL, &quot;test-client&quot;)
 token, err := client.StartAuthFlow(context.Background())
+
 </code></pre>
 <h2 id="troubleshooting">Troubleshooting</h2>
 <h3 id="browser-doesnt-open">Browser doesn't open</h3>
@@ -1619,12 +1628,14 @@ token, err := client.StartAuthFlow(context.Background())
 <li><code>internal/tui/login_sso.go</code> - TUI SSO login implementation</li>
 </ul>
 <h2 id="dependencies">Dependencies</h2>
-<p>No new external dependencies required! All implementation uses Go standard library:
-- <code>crypto/rand</code> - Secure random generation
-- <code>crypto/sha256</code> - PKCE challenge hashing
-- <code>encoding/base64</code> - Base64URL encoding
-- <code>net/http</code> - HTTP client and callback server
-- <code>os/exec</code> - Browser launching</p>
+<p>No new external dependencies required! All implementation uses Go standard library:</p>
+<ul>
+<li><code>crypto/rand</code> - Secure random generation</li>
+<li><code>crypto/sha256</code> - PKCE challenge hashing</li>
+<li><code>encoding/base64</code> - Base64URL encoding</li>
+<li><code>net/http</code> - HTTP client and callback server</li>
+<li><code>os/exec</code> - Browser launching</li>
+</ul>
 
 
 

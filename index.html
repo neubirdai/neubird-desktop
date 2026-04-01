@@ -668,6 +668,50 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#investigation-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Investigation Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-opus-runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When Opus Runs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stream-retry-on-transient-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stream Retry on Transient Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#thin-answer-conclusion-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thin-Answer Conclusion Injection
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1644,6 +1688,50 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#investigation-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Investigation Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-opus-runs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When Opus Runs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stream-retry-on-transient-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stream Retry on Transient Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#thin-answer-conclusion-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thin-Answer Conclusion Injection
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2156,61 +2244,247 @@ curl -X POST http://localhost:8080/v1/sentinel/stop
 <table>
 <thead>
 <tr>
-<th>Event Type</th>
+<th>SSE Event Type</th>
+<th>Go Callback</th>
+<th>TUI Handler</th>
+<th>Web Proxy (falcon.py)</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>text</code></td>
-<td>Streamed text chunk (investigation narration)</td>
+<td><code>chunk</code></td>
+<td><code>OnText</code></td>
+<td><code>sp.AddText()</code></td>
+<td>Code-fence filter → RCA suppressor → yield markdown</td>
+<td>Streamed text from Claude (investigation narration, final answer, Opus synthesis)</td>
 </tr>
 <tr>
 <td><code>tool_start</code></td>
+<td><code>OnToolExec</code> (IsStart=true)</td>
+<td><code>sp.AddToolStart()</code></td>
+<td><code>update_status</code> with friendly label, CoT tracker</td>
 <td>Agent begins executing a tool</td>
 </tr>
 <tr>
 <td><code>tool_done</code></td>
-<td>Tool execution completed</td>
+<td><code>OnToolExec</code> (IsStart=false)</td>
+<td><code>sp.AddToolResult()</code></td>
+<td>Renders markdown table or hides exploratory errors</td>
+<td>Tool execution completed (output may be truncated to 8KB)</td>
 </tr>
 <tr>
 <td><code>tool_data</code></td>
-<td>Raw structured data from a data-producing tool (for charts/tables)</td>
+<td><code>OnToolData</code></td>
+<td><code>sp.AddToolData()</code></td>
+<td>Fallback table render from full JSON; stores raw SQL results</td>
+<td>Full structured output from data-producing tools (not truncated)</td>
 </tr>
 <tr>
 <td><code>data_read</code></td>
+<td><code>OnDataRead</code></td>
+<td><code>sp.SetDataRead()</code></td>
+<td>Logs bytes/rows/queries, updates CoT tracker</td>
 <td>Cumulative telemetry data volume (bytes, rows, queries from exec_sql)</td>
 </tr>
 <tr>
 <td><code>progress</code></td>
+<td><code>OnProgress</code></td>
+<td><code>sp.SetProgress()</code></td>
+<td><code>update_progress(pct, confidence)</code>, CoT state</td>
 <td>Investigation progress percentage, phase, and confidence</td>
 </tr>
 <tr>
+<td><code>phase</code></td>
+<td><code>OnPhase</code></td>
+<td><code>sp.SetAgentPhase()</code> → overrides progress bar label</td>
+<td>Yields demarcated <code>falcon_phase</code> JSON block</td>
+<td>Agent phase transition: <code>investigating</code>, <code>answering</code>, <code>synthesizing</code></td>
+</tr>
+<tr>
 <td><code>turn</code></td>
-<td>LLM iteration number</td>
+<td><code>OnTurn</code></td>
+<td><code>sp.SetTurn()</code></td>
+<td>Not handled (logged, ignored)</td>
+<td>LLM iteration number within the tool-use loop</td>
+</tr>
+<tr>
+<td><code>trace</code></td>
+<td><code>OnTrace</code></td>
+<td><code>sp.SetTraceID()</code></td>
+<td>Not handled (logged, ignored)</td>
+<td>OpenTelemetry trace ID for Langfuse correlation</td>
 </tr>
 <tr>
 <td><code>sources</code></td>
-<td>Data sources used in the investigation</td>
-</tr>
-<tr>
-<td><code>session_metadata</code></td>
-<td>Running investigation metadata (cost, timing, actions)</td>
+<td><code>OnSources</code></td>
+<td><code>sp.SetSourceSummary()</code></td>
+<td>Stored; emitted as <code>CONTENT_TYPE_SOURCES</code> in finally block</td>
+<td>Data sources (tables, URLs) used in the investigation</td>
 </tr>
 <tr>
 <td><code>health_report</code></td>
-<td>Structured health/cost report text</td>
+<td><code>OnHealthReport</code></td>
+<td><code>RenderHealthSummaryTiles()</code> → <code>sp.AddText()</code></td>
+<td>Yields inline markdown block</td>
+<td>Sonnet's structured health findings (mid-stream, before Opus synthesis)</td>
+</tr>
+<tr>
+<td><code>rca_saved</code></td>
+<td><code>OnRCASaved</code></td>
+<td>Not wired (TUI reads file paths from text)</td>
+<td>Persists RCA markdown + structured JSON to MongoDB</td>
+<td>Opus synthesis report saved as PDF/markdown</td>
+</tr>
+<tr>
+<td><code>session_metadata</code></td>
+<td><code>OnSessionMetadata</code></td>
+<td>Not wired</td>
+<td>Yields demarcated JSON; persists to session store on COMPLETED</td>
+<td>Running investigation metadata (cost, timing, actions, time-saved)</td>
 </tr>
 <tr>
 <td><code>rating_request</code></td>
-<td>Signal to show a rating prompt</td>
+<td><code>OnRatingRequest</code></td>
+<td>Not wired</td>
+<td>Logged, ignored (Raven UI handles ratings)</td>
+<td>Signal to show a thumbs-up/down prompt</td>
 </tr>
 <tr>
 <td><code>error</code></td>
-<td>Non-recoverable error</td>
+<td><code>OnError</code></td>
+<td><code>sp.SetError()</code></td>
+<td>Yields warning message, breaks stream loop</td>
+<td>Non-recoverable error (or synthetic event from connection loss)</td>
 </tr>
 </tbody>
 </table>
+<h3 id="investigation-flow">Investigation Flow</h3>
+<p>Every investigation follows this sequence. Opus synthesis only runs when specific conditions are met (see <a href="#when-opus-runs">When Opus Runs</a> below).</p>
+<pre><code>User question
+  │
+  ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  Phase: investigating  (Sonnet tool loop)                       │
+│                                                                 │
+│  Events: chunk, tool_start, tool_done, tool_data, data_read,   │
+│          progress, turn                                         │
+│                                                                 │
+│  Claude iterates: think → call tools → observe results → think  │
+│  Tools execute in parallel. Up to 25 iterations per batch.      │
+│  Each iteration is one SendMessageStream API call.              │
+│                                                                 │
+│  Loop exits when:                                               │
+│    • StopReason = &quot;end_turn&quot; → Claude is done (normal exit)     │
+│    • StopReason = &quot;max_tokens&quot; → auto-continue with same state  │
+│    • StopReason = &quot;tool_use&quot; → execute tools, loop again        │
+│    • Iteration limit (25) hit → summarize, ask to continue      │
+└─────────────┬───────────────────────────────────────────────────┘
+              │
+              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  Phase: answering  (Sonnet final turn)                          │
+│                                                                 │
+│  Events: phase(&quot;answering&quot;)                                     │
+│                                                                 │
+│  Sonnet's last text was already streamed during the loop.       │
+│  This phase marker tells clients the investigation is complete  │
+│  and any future chunks are synthesis.                           │
+└─────────────┬───────────────────────────────────────────────────┘
+              │
+              ▼
+        ┌─────────────┐
+        │ Opus needed? │──── No ──── skip to completion
+        └──────┬──────┘
+               │ Yes
+               ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  Phase: synthesizing  (Opus senior review)                      │
+│                                                                 │
+│  Events: phase(&quot;synthesizing&quot;), health_report (health only),    │
+│          chunk (Opus text), rca_saved                            │
+│                                                                 │
+│  Opus reviews ALL evidence from the Sonnet loop and produces    │
+│  a rigorous synthesis: RCA, health assessment, or cost analysis.│
+│  Text streams as chunk events — the user reads it live.         │
+│  A PDF/markdown report is saved automatically.                  │
+└─────────────┬───────────────────────────────────────────────────┘
+              │
+              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  Completion                                                     │
+│                                                                 │
+│  Events: session_metadata (COMPLETED), sources, rating_request, │
+│          phase not emitted — OnDone fires                       │
+│                                                                 │
+│  TUI: green &quot;✅ completed in ...&quot; footer bar                    │
+│  Server: [DONE] SSE sentinel                                    │
+└─────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="when-opus-runs">When Opus Runs</h3>
+<p>Opus synthesis requires <strong>both</strong> conditions to be true. If either fails, Sonnet's answer stands alone — no Opus pass.</p>
+<table>
+<thead>
+<tr>
+<th>Investigation Type</th>
+<th>Question Detection</th>
+<th>Minimum Sources</th>
+<th>Opus Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Health</strong></td>
+<td>Question starts with <code>"Run a rapid infrastructure health assessment."</code> (generated by <code>/health</code> slash command)</td>
+<td>≥ 3</td>
+<td><code>runHealthSynthesis</code> — senior SRE review of Good/Bad/Ugly findings</td>
+</tr>
+<tr>
+<td><strong>Cost</strong></td>
+<td>Question starts with the cost analysis prefix (generated by <code>/cost</code> slash command)</td>
+<td>≥ 2</td>
+<td><code>runCostSynthesis</code> — cost trend extrapolation and ROI-ranked cuts</td>
+</tr>
+<tr>
+<td><strong>RCA</strong></td>
+<td>Question contains trigger keywords (see below)</td>
+<td>≥ 3</td>
+<td><code>runSynthesis</code> — rigorous root cause analysis with evidence chain</td>
+</tr>
+<tr>
+<td><strong>General</strong></td>
+<td>None of the above, or 0 sources queried</td>
+<td>—</td>
+<td><strong>No Opus</strong> — Sonnet's answer is the final output</td>
+</tr>
+</tbody>
+</table>
+<p><strong>RCA trigger keywords</strong> — if any of these appear anywhere in the user's question (case-insensitive), the question is eligible for Opus RCA synthesis:</p>
+<p><code>root cause</code>, <code>rca</code>, <code>investigate</code>, <code>incident</code>, <code>what caused</code>, <code>what happened</code>, <code>why is</code>, <code>why are</code>, <code>why did</code>, <code>find the cause</code>, <code>diagnose</code>, <code>postmortem</code>, <code>post-mortem</code>, <code>find out why</code>, <code>long running</code>, <code>slow quer</code>, <code>slow job</code>, <code>performance</code>, <code>jobs</code>, <code>blocking</code>, <code>locks</code>, <code>deadlock</code>, <code>timeout</code></p>
+<p><strong>Common reasons Opus doesn't run:</strong></p>
+<ul>
+<li>The question doesn't match any trigger keyword — e.g. "Show me trace latencies" won't trigger Opus even with 10 sources, because none of the RCA keywords are present. Rephrasing as "Investigate the trace latency slowdown" would trigger it.</li>
+<li>Claude answered from conversation context or knowledge without making any tool calls (0 sources).</li>
+<li>The investigation only queried 1-2 data sources — not enough evidence for a meaningful synthesis.</li>
+</ul>
+<h3 id="stream-retry-on-transient-errors">Stream Retry on Transient Errors</h3>
+<p>When the Anthropic API drops the connection mid-stream (HTTP/2 reset, <code>INTERNAL_ERROR</code>, TCP reset), the agent retries the current LLM call automatically. The conversation history is intact — the failed partial response was never appended — so Claude regenerates from the same state.</p>
+<ul>
+<li>Up to 2 retries with 3s / 6s backoff</li>
+<li>User sees <code>🔄 LLM connection lost, retrying (1/2)...</code> inline</li>
+<li>Applies to both the Sonnet investigation loop and tool-use iterations</li>
+<li>Non-transient errors (auth failures, rate limits, context cancellation) are not retried</li>
+</ul>
+<h3 id="thin-answer-conclusion-injection">Thin-Answer Conclusion Injection</h3>
+<p>Claude sometimes stops after gathering evidence without writing a conclusion — especially on lower-confidence investigations where it queried data but didn't synthesize findings. The user sees tool results followed immediately by the green completion bar with no analysis in between.</p>
+<p>The agent detects this and injects a conclusion prompt automatically:</p>
+<ul>
+<li><strong>Triggers when:</strong> <code>end_turn</code> with &lt; 200 characters of text AND ≥ 3 tool calls were executed</li>
+<li><strong>What happens:</strong> A conclusion prompt is appended to the conversation and one more <code>SendMessageStream</code> call is made <strong>without tools</strong> (so Claude writes text only — no more queries)</li>
+<li><strong>User sees:</strong> The analysis streams in naturally, as if Claude had written it in the first place</li>
+<li><strong>Safety:</strong> Only fires once per investigation (<code>concludedOnce</code> flag prevents loops). If the conclusion call fails, the investigation completes normally — the user still has all the evidence from the tool calls</li>
+</ul>
+<p>This does not apply to simple questions (&lt; 3 tool calls) where Claude's short answer is appropriate, nor to cases where Claude wrote a substantial response alongside its last tool call.</p>
 <h2 id="documentation">Documentation</h2>
 <p>Full documentation is available at <a href="https://neubirdai.github.io/neubird-desktop/">neubirdai.github.io/neubird-desktop</a>.</p>
 <h2 id="license">License</h2>
