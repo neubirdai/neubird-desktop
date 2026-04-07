@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://neubirdai.github.io/neubird-desktop/usage/tui/">
+        <link rel="canonical" href="https://neubirdai.github.io/neubird-desktop/features/headless-investigations/">
       
       
-        <link rel="prev" href="../../features/persistent-learning/">
+        <link rel="prev" href="../investigations/">
       
       
-        <link rel="next" href="../slash-commands/">
+        <link rel="next" href="../health-sweeps/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Terminal UI - NeuBird Desktop</title>
+        <title>Headless Investigations - NeuBird Desktop</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#terminal-ui" class="md-skip">
+        <a href="#headless-investigations" class="md-skip">
           Skip to content
         </a>
       
@@ -123,7 +123,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Terminal UI
+              Headless Investigations
             
           </span>
         </div>
@@ -273,11 +273,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../features/investigations/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../investigations/" class="md-tabs__link">
           
   
   
@@ -293,13 +295,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../usage/tui/" class="md-tabs__link">
           
   
   
@@ -521,26 +521,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -558,7 +563,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -576,7 +581,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/investigations/" class="md-nav__link">
+      <a href="../investigations/" class="md-nav__link">
         
   
   
@@ -601,10 +606,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../features/headless-investigations/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headless Investigations
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -620,6 +652,114 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capabilities
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flags
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-turn-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-turn sessions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discovering-projects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovering projects
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exit-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exit codes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-invocations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example invocations
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -632,7 +772,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/health-sweeps/" class="md-nav__link">
+      <a href="../health-sweeps/" class="md-nav__link">
         
   
   
@@ -660,7 +800,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/cost-analysis/" class="md-nav__link">
+      <a href="../cost-analysis/" class="md-nav__link">
         
   
   
@@ -688,7 +828,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/predictive/" class="md-nav__link">
+      <a href="../predictive/" class="md-nav__link">
         
   
   
@@ -716,7 +856,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/preventive/" class="md-nav__link">
+      <a href="../preventive/" class="md-nav__link">
         
   
   
@@ -744,7 +884,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/agent-personas/" class="md-nav__link">
+      <a href="../agent-personas/" class="md-nav__link">
         
   
   
@@ -772,7 +912,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/tool-review/" class="md-nav__link">
+      <a href="../tool-review/" class="md-nav__link">
         
   
   
@@ -800,7 +940,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/persistent-learning/" class="md-nav__link">
+      <a href="../persistent-learning/" class="md-nav__link">
         
   
   
@@ -832,31 +972,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -874,7 +1009,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -889,37 +1024,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Terminal UI
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../usage/tui/" class="md-nav__link">
         
   
   
@@ -935,103 +1043,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#layout" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Layout
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#input-history" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Input history
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cancelling-an-investigation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Cancelling an investigation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quitting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quitting
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#dark-and-light-terminal-support" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Dark and light terminal support
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#session-persistence" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Session persistence
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#investigation-output" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Investigation Output
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1044,7 +1055,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../slash-commands/" class="md-nav__link">
+      <a href="../../usage/slash-commands/" class="md-nav__link">
         
   
   
@@ -1072,7 +1083,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../keyboard-shortcuts/" class="md-nav__link">
+      <a href="../../usage/keyboard-shortcuts/" class="md-nav__link">
         
   
   
@@ -1100,7 +1111,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../agent-personas/" class="md-nav__link">
+      <a href="../../usage/agent-personas/" class="md-nav__link">
         
   
   
@@ -1270,10 +1281,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#layout" class="md-nav__link">
+  <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Layout
+        Usage
       
     </span>
   </a>
@@ -1281,10 +1292,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#input-history" class="md-nav__link">
+  <a href="#capabilities" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Input history
+        Capabilities
       
     </span>
   </a>
@@ -1292,10 +1303,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#cancelling-an-investigation" class="md-nav__link">
+  <a href="#flags" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Cancelling an investigation
+        Flags
       
     </span>
   </a>
@@ -1303,10 +1314,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#quitting" class="md-nav__link">
+  <a href="#multi-turn-sessions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Quitting
+        Multi-turn sessions
       
     </span>
   </a>
@@ -1314,10 +1325,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dark-and-light-terminal-support" class="md-nav__link">
+  <a href="#discovering-projects" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Dark and light terminal support
+        Discovering projects
       
     </span>
   </a>
@@ -1325,10 +1336,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#session-persistence" class="md-nav__link">
+  <a href="#exit-codes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Session persistence
+        Exit codes
       
     </span>
   </a>
@@ -1336,10 +1347,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#investigation-output" class="md-nav__link">
+  <a href="#how-it-works" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Investigation Output
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-invocations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example invocations
       
     </span>
   </a>
@@ -1363,37 +1385,214 @@
 
 
 
-<h1 id="terminal-ui">Terminal UI</h1>
-<p>NeuBird Desktop runs as a full-screen terminal application built on <a href="https://github.com/charmbracelet/bubbletea">Bubbletea</a>.</p>
+<h1 id="headless-investigations">Headless Investigations</h1>
+<p>The <code>neubird run</code> and <code>neubird investigate</code> commands run AI-powered analyses from the command line without the interactive TUI. Designed for programmatic invocation by external tools, CI pipelines, and coding agents like OpenClaw.</p>
 <hr />
-<h2 id="layout">Layout</h2>
-<p>When you connect, the TUI shows:</p>
-<ul>
-<li><strong>Welcome tiles</strong> — context-aware starter questions based on your telemetry schema. Use <code>←</code> <code>→</code> to navigate, <code>Enter</code> to select.</li>
-<li><strong>Input bar</strong> — type any question or slash command and press <code>Enter</code> to submit.</li>
-<li><strong>Investigation panel</strong> — NeuBird streams its analysis here as it runs, showing tool activity, data source queries, and the final answer.</li>
-<li><strong>Status bar</strong> — current connection info, active agent persona, and data sources used in the last investigation.</li>
-</ul>
-<p><img alt="NeuBird TUI welcome screen with investigation tiles" src="../../assets/screenshots/health-check-welcome-tiles.svg" /></p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-text">neubird run &lt;capability&gt; --project &lt;name&gt;
+neubird run health --project prod_cop
+neubird run cost 7d --project prod_cop
+neubird investigate &quot;any 403s in the last hour?&quot; --project prod_cop
+</code></pre>
+<p>Findings are printed as markdown to <strong>stdout</strong>, ending with a <code>Completed in Xs</code> sentinel line. Stderr is used only for errors and the spinner during investigation.</p>
+<pre><code class="language-bash"># Save findings to a file
+neubird run health --project prod_cop &gt; health-report.md
+
+# Free-form investigation
+neubird investigate &quot;what caused the latency spike?&quot; --project prod_cop &gt; findings.md
+</code></pre>
 <hr />
-<h2 id="input-history">Input history</h2>
-<p>NeuBird remembers your previous inputs. Use <code>↑</code> / <code>↓</code> to navigate history, or <code>Ctrl+R</code> to search it.</p>
+<h2 id="capabilities">Capabilities</h2>
+<p><code>neubird run</code> exposes named analysis types:</p>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Description</th>
+<th>Default lookback</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>health</code></td>
+<td>Full infrastructure health sweep</td>
+<td>1 hour</td>
+</tr>
+<tr>
+<td><code>cost</code></td>
+<td>Cloud cost baseline + 24h spend projection</td>
+<td>24 hours</td>
+</tr>
+<tr>
+<td><code>investigate</code></td>
+<td>Free-form investigation prompt</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>performance</code></td>
+<td>Find latency outliers and slow queries</td>
+<td>1 hour</td>
+</tr>
+<tr>
+<td><code>predict</code></td>
+<td>What could go wrong in the next 24h?</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>deep-dive</code></td>
+<td>Full health sweep with extended context</td>
+<td>24 hours</td>
+</tr>
+<tr>
+<td><code>silent-failures</code></td>
+<td>Find quietly degrading services</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>change-risk</code></td>
+<td>Assess risk from recent deployments</td>
+<td>24 hours</td>
+</tr>
+<tr>
+<td><code>blast-radius</code></td>
+<td>Map dependency chains and cascade risk</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Capabilities that accept a lookback window can be customized: <code>neubird run health 4h</code>, <code>neubird run cost 7d</code>.</p>
+<p><code>neubird investigate "&lt;prompt&gt;"</code> is an alias for <code>neubird run investigate "&lt;prompt&gt;"</code>.</p>
 <hr />
-<h2 id="cancelling-an-investigation">Cancelling an investigation</h2>
-<p>Press <code>Esc</code> to cancel an in-progress investigation. The model stops at the next safe point.</p>
+<h2 id="flags">Flags</h2>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--project</code></td>
+<td>—</td>
+<td>Project to investigate (name or UUID). Required on first call.</td>
+</tr>
+<tr>
+<td><code>--timeout</code></td>
+<td><code>120</code></td>
+<td>Investigation timeout in seconds (health/cost/deep-dive enforce 300s minimum)</td>
+</tr>
+<tr>
+<td><code>--session</code></td>
+<td>—</td>
+<td>Session file for multi-turn conversations (path or directory)</td>
+</tr>
+<tr>
+<td><code>--cleanup</code></td>
+<td><code>false</code></td>
+<td>Delete a session file and exit</td>
+</tr>
+<tr>
+<td><code>--verbose</code></td>
+<td><code>false</code></td>
+<td>Show tool calls, progress markers, and MCP server logs on stderr</td>
+</tr>
+<tr>
+<td><code>--format</code></td>
+<td><code>markdown</code></td>
+<td>Output format</td>
+</tr>
+<tr>
+<td><code>--profile</code></td>
+<td>unnamed</td>
+<td>Login profile (set via global <code>neubird --profile &lt;name&gt;</code>)</td>
+</tr>
+</tbody>
+</table>
 <hr />
-<h2 id="quitting">Quitting</h2>
-<p>Press <code>Ctrl+C</code> twice, or type <code>/quit</code>.</p>
+<h2 id="multi-turn-sessions">Multi-turn sessions</h2>
+<p>Use <code>--session</code> to persist conversation history across invocations, enabling follow-up questions:</p>
+<pre><code class="language-bash"># First turn — auto-generates session file in /tmp/
+neubird run health --project prod_cop --session /tmp/
+# stderr: Session: /tmp/nb-1743620000000.json
+
+# Follow-up — agent has full context from the health sweep
+neubird investigate &quot;drill into the RDS memory alarm&quot; --session /tmp/nb-1743620000000.json
+
+# Clean up
+neubird investigate --cleanup --session /tmp/nb-1743620000000.json
+</code></pre>
+<p>Session files store conversation history and cached schema context. Follow-up calls skip schema discovery, saving ~15-20 seconds. The <code>--project</code> flag is inherited from the session on follow-ups.</p>
+<p>When <code>--session</code> points to a directory, a new session file (<code>nb-&lt;timestamp&gt;.json</code>) is auto-generated. The resolved path is printed to stderr so callers can capture it.</p>
 <hr />
-<h2 id="dark-and-light-terminal-support">Dark and light terminal support</h2>
-<p>The TUI adapts its color palette to your terminal's background. No configuration required.</p>
+<h2 id="discovering-projects">Discovering projects</h2>
+<p>Use <code>neubird projects</code> to list available projects for the current login profile:</p>
+<pre><code class="language-text">neubird projects
+</code></pre>
+<pre><code class="language-text">PROJECT        ID
+prod_cop       ed9e59e3-a843-4a14-8afd-8e3975aef71d
+staging_auto   11598cd2-fd50-49c7-8b57-02de7ab1d689
+dev_cop        a322dffc-476f-4e5d-8669-fe7e5044dd4c
+</code></pre>
+<p>Both the project name and UUID work with <code>--project</code>.</p>
 <hr />
-<h2 id="session-persistence">Session persistence</h2>
-<p>NeuBird saves your last-used namespace, service, and database in <code>~/.config/neubird/state.json</code>. The next time you run <code>neubird --reconnect</code>, it restores this context without prompting.</p>
+<h2 id="exit-codes">Exit codes</h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>Investigation complete, findings on stdout</td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td>Investigation failed or timed out</td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td>Not authenticated — run <code>neubird login</code></td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td>No connected environment found</td>
+</tr>
+</tbody>
+</table>
 <hr />
-<h2 id="investigation-output">Investigation Output</h2>
-<p>After the analysis completes, NeuBird renders a formatted summary with tables and recommended actions:</p>
-<p><img alt="Completed investigation with markdown summary" src="../../assets/screenshots/health-check-final-summary.svg" /></p>
+<h2 id="how-it-works">How it works</h2>
+<ol>
+<li><strong>Authenticate</strong> — loads credentials from the saved login profile</li>
+<li><strong>Connect</strong> — connects to the specified project via NeuBird's ACE engine</li>
+<li><strong>Discover</strong> — scans the project's telemetry schema (cached in session files for follow-ups)</li>
+<li><strong>Investigate</strong> — runs the same agentic investigation loop as the <a href="../../usage/tui/">interactive TUI</a></li>
+<li><strong>Report</strong> — prints structured markdown findings to stdout</li>
+</ol>
+<p>The investigation uses the same AI engine, tools, and skills as interactive sessions. For health and cost sweeps, findings are handed off to a senior-level synthesis pass before output. See <a href="../investigations/">Agentic Investigations</a> for details on how the investigation loop works.</p>
+<hr />
+<h2 id="example-invocations">Example invocations</h2>
+<pre><code class="language-bash"># Infrastructure health
+neubird run health --project prod_cop
+neubird run health 4h --project prod_cop
+
+# Cost analysis
+neubird run cost --project prod_cop
+neubird run cost 7d --project staging_auto
+
+# Free-form investigation
+neubird investigate &quot;the checkout service is throwing 503s&quot; --project prod_cop
+neubird investigate &quot;pods in payments namespace are CrashLoopBackOff&quot; --project staging_auto
+
+# Predictive and risk analysis
+neubird run predict --project prod_cop
+neubird run change-risk --project prod_cop
+neubird run silent-failures --project prod_cop
+</code></pre>
 
 
 
