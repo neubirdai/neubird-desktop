@@ -1155,6 +1155,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="AgentDefinition">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registry-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registry safety
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -1180,10 +1197,49 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#agent" class="md-nav__link">
+  <a href="#agent-struct-shared-vs-per-run-state" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Agent
+        Agent struct — shared vs per-run state
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Agent struct — shared vs per-run state">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#shared-state-on-agent-struct" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared state (on agent struct)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-run-state-on-runstate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-run state (on runState)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prompt-sections-and-lazysection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt sections and lazySection
       
     </span>
   </a>
@@ -1228,6 +1284,17 @@
     <span class="md-ellipsis">
       
         MCP Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#background-interim-summarizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background interim summarizer
       
     </span>
   </a>
@@ -1384,6 +1451,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#agent-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Agent Lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1424,7 +1502,7 @@
 <h3 id="agentdefinition">AgentDefinition</h3>
 <p>Declared in <code>internal/agents/agents.go</code>. Describes a named AI persona with its model and capability constraints.</p>
 <pre><code class="language-go">type AgentDefinition struct {
-    Name             string        // &quot;Responder&quot; | &quot;Analyst&quot; | &quot;Architect&quot; | &quot;Scout&quot;
+    Name             string        // &quot;Responder&quot; | &quot;Analyst&quot; | &quot;Architect&quot;
     PersonaName      string        // optional human name for the persona
     Description      string        // one-liner shown in agent picker
     Persona          string        // injected into system prompt
@@ -1435,6 +1513,7 @@
     Skills           []string      // allowlist of skill IDs (nil = all)
     Tools            []string      // allowlist of tool names (nil = all)
     DisableSynthesis bool          // skip Opus synthesis handoff
+    AutoContinue     bool          // loop until fully answered (server/daemon mode)
     Timeout          time.Duration // per-run timeout (0 = default 10 min)
 }
 </code></pre>
@@ -1467,15 +1546,15 @@
 <td>1/3</td>
 <td>Runbooks, design docs, long-horizon</td>
 </tr>
-<tr>
-<td>Scout</td>
-<td>Opus</td>
-<td>1/3</td>
-<td>Data cartography, schema investigation</td>
-</tr>
 </tbody>
 </table>
 <p>Custom agents are loaded from <code>.md</code> files (YAML frontmatter + persona body) in <code>agents/</code> or <code>~/.config/neubird/agents/</code>.</p>
+<h4 id="registry-safety">Registry safety</h4>
+<p>The <code>agents.All</code> slice is protected by <code>allMu sync.RWMutex</code>. The public API provides two safe accessors:</p>
+<ul>
+<li><code>agents.Get(name)</code> — returns a <strong>heap-allocated copy</strong> of the matching entry. The pointer remains valid even if <code>Init()</code> later reallocates the backing array.</li>
+<li><code>agents.Snapshot()</code> — returns a <strong>full copy</strong> of the registry slice under a read lock. Use this for iteration (e.g., agent picker, <code>/agent</code> command). Do <strong>not</strong> range over <code>agents.All</code> directly.</li>
+</ul>
 <hr />
 <h3 id="session">Session</h3>
 <p>Declared in <code>internal/ai/interfaces.go</code>. The stable container for a conversation thread.</p>
@@ -1496,27 +1575,205 @@
     SendDigestRequest(ctx, systemPrompt, messages) (*APIResponse, error)
 }
 </code></pre>
-<ul>
-<li>A <strong>fresh <code>Transport</code> is created for each <code>Execute</code> call</strong> and closed in a deferred cleanup when the call returns. There is no shared pool between concurrent calls, so per-call state (debug log pointer, etc.) is fully isolated.</li>
-<li>Supports Anthropic, AWS Bedrock, and Azure backends.</li>
-<li>Streams tokens via <code>StreamCallback(event StreamEvent)</code>.</li>
-</ul>
+<p>There are <strong>two distinct transport lifecycles</strong>:</p>
+<ol>
+<li>
+<p><strong>Per-Execute transport</strong> (<code>rs.transport</code>): created fresh at the start of each <code>Execute</code> call for the main LLM loop, and closed in a deferred cleanup when <code>Execute</code> returns. Carries the agent model, debug log pointer, and other per-call state. Fully isolated — concurrent <code>Execute</code> calls never share this transport.</p>
+</li>
+<li>
+<p><strong>Digest transport</strong> (<code>a.digestTransport</code>): created once in <code>NewAgent</code> and reused for all background interim-summary (Haiku digest) calls across the agent's lifetime. Closed in <code>Close()</code> only after draining all in-flight goroutines via <code>a.interim.wg.Wait()</code>. Using a shared digest transport avoids spawning a new HTTP client (and TLS handshake) for every tool round.</p>
+</li>
+</ol>
 <hr />
-<h3 id="agent">Agent</h3>
-<p>Declared in <code>internal/ai/interfaces.go</code>. The main execution unit combining transport, session, tools, and skills.</p>
-<pre><code class="language-go">type Agent interface {
-    ToolProvider   // tool discovery, MCP status
-    SkillManager   // skill injection
-    HistoryManager // conversation memory
-    Runner         // Execute / Run methods
+<h3 id="agent-struct-shared-vs-per-run-state">Agent struct — shared vs per-run state</h3>
+<p><code>agent</code> in <code>internal/ai/agent.go</code> is a long-lived struct. It holds two kinds of state: <strong>shared</strong> (safe for concurrent <code>Execute</code> calls) and <strong>per-run</strong> (isolated to a single <code>Execute</code> invocation via <code>runState</code>).</p>
+<h4 id="shared-state-on-agent-struct">Shared state (on <code>agent</code> struct)</h4>
+<p>These fields are either immutable after <code>NewAgent</code>, or protected by their own synchronisation primitive:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Protection</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>baseCfg</code></td>
+<td><code>ProviderConfig</code></td>
+<td>immutable</td>
+<td>LLM provider credentials</td>
+</tr>
+<tr>
+<td><code>basePromptSection</code></td>
+<td><code>*MutableSection</code></td>
+<td><code>sync.RWMutex</code> inside</td>
+<td>Overridden per-agent; read on every prompt build</td>
+</tr>
+<tr>
+<td><code>schemaSection</code></td>
+<td><code>*MutableSection</code></td>
+<td><code>sync.RWMutex</code> inside</td>
+<td>DB schema; updated by <code>SetSchemaContext</code></td>
+</tr>
+<tr>
+<td><code>extraSection</code></td>
+<td><code>*MutableSection</code></td>
+<td><code>sync.RWMutex</code> inside</td>
+<td>Extra instructions</td>
+</tr>
+<tr>
+<td><code>tableSection</code></td>
+<td><code>*MutableSection</code></td>
+<td><code>sync.RWMutex</code> inside</td>
+<td>Table learnings</td>
+</tr>
+<tr>
+<td><code>insightsSection</code></td>
+<td><code>*MutableSection</code></td>
+<td><code>sync.RWMutex</code> inside</td>
+<td>User insights</td>
+</tr>
+<tr>
+<td><code>skillsSection</code></td>
+<td><code>*MutableSection</code></td>
+<td><code>sync.RWMutex</code> inside</td>
+<td>Live shared skills text (used when no per-run allowlist)</td>
+</tr>
+<tr>
+<td><code>skills</code></td>
+<td><code>skillsRegistry</code></td>
+<td><code>sync.RWMutex</code> inside</td>
+<td>Map of all loaded local skills</td>
+</tr>
+<tr>
+<td><code>mcp</code></td>
+<td><code>mcpRegistry</code></td>
+<td><code>sync.RWMutex</code> inside</td>
+<td>MCP tool list + sessions</td>
+</tr>
+<tr>
+<td><code>sentinel</code></td>
+<td><code>sentinelManager</code></td>
+<td><code>sync.Mutex</code> + <code>atomic.Pointer</code></td>
+<td>Background sentinel lifecycle</td>
+</tr>
+<tr>
+<td><code>watch</code></td>
+<td><code>watchManager</code></td>
+<td><code>sync.Mutex</code> + <code>atomic.Pointer</code></td>
+<td>Background watch lifecycle</td>
+</tr>
+<tr>
+<td><code>digestTransport</code></td>
+<td><code>Transport</code></td>
+<td>WaitGroup drain before close</td>
+<td>Reused for all Haiku digest calls</td>
+</tr>
+<tr>
+<td><code>interim</code></td>
+<td><code>interimState</code></td>
+<td><code>sync.Mutex</code> + <code>sync.WaitGroup</code></td>
+<td>Background summarizer state</td>
+</tr>
+<tr>
+<td><code>lastResult</code></td>
+<td><code>safeRunResult</code></td>
+<td><code>sync.RWMutex</code></td>
+<td>Outcome of most recent Execute</td>
+</tr>
+<tr>
+<td><code>ace</code></td>
+<td><code>aceConnector</code></td>
+<td><code>sync.Mutex</code> + <code>atomic.Int64</code></td>
+<td>ACE reconnect deduplication</td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td><code>*db.Store</code></td>
+<td>—</td>
+<td>Postgres store; methods are concurrency-safe</td>
+</tr>
+<tr>
+<td><code>learnings</code>, <code>tableLearnings</code>, <code>feedbackStore</code></td>
+<td>store types</td>
+<td>—</td>
+<td>Concurrency-safe by design</td>
+</tr>
+<tr>
+<td><code>agentName</code></td>
+<td><code>atomic.Value</code></td>
+<td>atomic</td>
+<td>Set by TUI, read by agent goroutine</td>
+</tr>
+</tbody>
+</table>
+<h4 id="per-run-state-on-runstate">Per-run state (on <code>runState</code>)</h4>
+<p><code>runState</code> is created fresh at the top of each <code>Execute</code> call and never shared with other concurrent calls. This is the key mechanism that makes it safe to call <code>Execute</code> concurrently on the same <code>agent</code>.</p>
+<pre><code class="language-go">type runState struct {
+    // Infrastructure (resolved from AgentDefinition + RunConfig)
+    transport        Transport        // fresh client for this model/call
+    buildPrompt      func() string    // closure combining per-run + shared sections
+    allowedTools     map[string]bool  // nil = all tools
+    allowedSkills    map[string]bool  // nil = all skills
+    disableSynthesis bool
+    autoContinue     bool
 
-    Execute(ctx, session, def, prompt, callback, ...cfg)
-    Run(ctx, session, def, prompt, callback, ...cfg)  // async goroutine
-    Continue()
-    SetSchemaContext(ctx)
-    LoadHistory(session)
+    // Execution tracking
+    session          *Session
+    sources          []SourceEntry    // data sources touched this run
+    progress         *ProgressTracker
+    turns            []TurnSnapshot   // per-turn reasoning chain for ACE
+    toolLog          *ToolLog
+    actionsMu        sync.Mutex
+    summaryMu        sync.Mutex
+    turnSummaries    map[int]string   // interim summaries keyed by turn (async)
+
+    // Chart accumulation (per-run; never shared with concurrent calls)
+    charts   []ChartEntry
+    chartsMu sync.Mutex
+
+    // Other per-call fields (counters, timestamps, question text, etc.)
+    ...
 }
 </code></pre>
+<hr />
+<h3 id="prompt-sections-and-lazysection">Prompt sections and lazySection</h3>
+<p><code>internal/ai/prompt_sections.go</code> defines the <code>PromptSection</code> interface:</p>
+<pre><code class="language-go">type PromptSection interface {
+    Build() string
+}
+</code></pre>
+<p>Implementations:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>StaticSection</code></td>
+<td>Immutable text (persona, agent prompt)</td>
+</tr>
+<tr>
+<td><code>MutableSection</code></td>
+<td>Shared text updated at runtime; thread-safe via <code>sync.RWMutex</code></td>
+</tr>
+<tr>
+<td><code>DateSection</code></td>
+<td>Always returns current UTC date/time</td>
+</tr>
+<tr>
+<td><code>lazySection</code></td>
+<td>Re-evaluates a closure on every <code>Build()</code> call</td>
+</tr>
+</tbody>
+</table>
+<p><code>lazySection</code> is used for the <strong>per-run skills prompt</strong> when a skills allowlist or <code>autoContinue</code> mode is active. Because <code>InjectLocalSkills</code> can add skills mid-run, the closure captures a reference to <code>skillsRegistry.snapshot()</code> (called on each <code>Build()</code>), so new skills injected between LLM turns are automatically reflected in the next turn's system prompt — without any lock coordination between the Execute goroutine and the skills injector.</p>
+<p>When neither an allowlist nor <code>autoContinue</code> is set, the run simply reuses the engine-level <code>a.skillsSection</code> (<code>MutableSection</code>) directly.</p>
 <hr />
 <h3 id="infraconfig">InfraConfig</h3>
 <p>Declared in <code>internal/ai/agent.go</code>. Wires the agent to external infrastructure.</p>
@@ -1534,16 +1791,22 @@
 <pre><code class="language-go">type RunConfig struct {
     MaxIterations    int
     FreshHistory     bool
-    AutoContinue     bool
+    AutoContinue     bool          // merged with AgentDefinition.AutoContinue (OR)
     AllowedTools     []string
     AllowedSkills    []string
-    DisableSynthesis *bool
+    DisableSynthesis *bool         // nil = use AgentDefinition.DisableSynthesis
     SessionID        string
     PromptID         string
     OutputSchema     json.RawMessage
     SuppressPersist  bool
 }
 </code></pre>
+<p>Resolution order for key fields:</p>
+<ul>
+<li><code>autoContinue = runCfg.AutoContinue || agentDef.AutoContinue</code></li>
+<li><code>disableSynthesis</code>: <code>runCfg.DisableSynthesis</code> (if non-nil) → <code>agentDef.DisableSynthesis</code></li>
+<li><code>timeout</code>: <code>agentDef.Timeout</code> → <code>TIMEOUT_SECONDS</code> env var → 10 minutes</li>
+</ul>
 <hr />
 <h3 id="skill">Skill</h3>
 <p>Declared in <code>internal/skills/loader.go</code>. A named, injectable prompt fragment with optional reference files.</p>
@@ -1585,19 +1848,34 @@
 <li>Tools hidden from LLM via <code>_meta.x_hidden_from_llm</code>.</li>
 </ul>
 <hr />
+<h3 id="background-interim-summarizer">Background interim summarizer</h3>
+<p>After each tool-use round, <code>launchBackgroundSummarizer</code> (in <code>internal/ai/interim_summary.go</code>) spins up a goroutine that calls <code>digestTransport.SendDigestRequest</code> with a <strong>snapshot copy</strong> of conversation history (never <code>a.history</code> directly). It produces a short "what we know so far" paragraph emitted via <code>OnInterimSummary</code>.</p>
+<p><strong>Concurrency invariants:</strong></p>
+<ul>
+<li>Only one background goroutine runs at a time (<code>interimState.bgRunning</code> flag, protected by <code>interimState.mu</code>).</li>
+<li>Rate-limited to one launch per 10 seconds.</li>
+<li><code>wg.Add(1)</code> is called <strong>inside the mutex</strong> (when <code>bgRunning</code> is set), so <code>Close()</code> calling <code>wg.Wait()</code> either blocks until the goroutine finishes or sees count=0 before any goroutine was committed — there is no window where <code>wg.Wait()</code> can return while a goroutine is about to start.</li>
+<li>If the delta is empty (nothing new since the last summary), <code>bgRunning</code> is cleared and <code>wg.Done()</code> is called immediately — no goroutine is launched but the <code>wg.Add</code> is always balanced.</li>
+<li><code>Close()</code> calls <code>a.interim.wg.Wait()</code> before closing <code>digestTransport</code>, preventing use-after-close races.</li>
+<li>Stale results from a previous investigation are detected via <code>interimState.generation</code> (incremented by <code>resetInterimState</code>).</li>
+</ul>
+<hr />
 <h2 id="workflows">Workflows</h2>
 <h3 id="tui-mode">TUI Mode</h3>
 <h4 id="startup">Startup</h4>
 <pre><code class="language-text">main()
   └─ tui.New(cfg)
-       ├─ LoadAgents(agentsDir)
-       ├─ skills.LoadMerged(...)         → []Skill
-       ├─ ai.NewAgent(transport, store)
+       ├─ agents.Init()                   → merges disk agents into agents.All (once, under allMu.Lock)
+       ├─ skills.LoadMerged(...)          → []Skill
+       ├─ ai.NewAgent(infraCfg, store)
+       │    ├─ NewClient(baseCfg)         → digestTransport (shared lifetime)
+       │    ├─ loadMCPTools()             → registers MCP sessions + tools
+       │    └─ registerLocalTools()
        ├─ ai.NewSession()
        └─ model.Init()
             ├─ Ping LLM (validate API key)
             ├─ db.Connect(pgEndpoint)
-            └─ agent.SetSchemaContext()  → discovers tables/columns
+            └─ agent.SetSchemaContext()   → discovers tables/columns
 </code></pre>
 <h4 id="per-question-flow">Per-Question Flow</h4>
 <pre><code class="language-text">User types prompt + Enter
@@ -1605,24 +1883,23 @@
        └─ agent.Run(ctx, session, activeAgent, prompt, AgentCallback{...})
             │  [runs in goroutine]
             │
-            ├─ Build system prompt:
-            │   agent persona + base_prompt + schema + learnings + skills
+            ├─ executeInternal():
+            │   ├─ Create rs.transport (fresh per-call, closed on return)
+            │   ├─ Resolve rs.allowedTools, rs.allowedSkills, rs.disableSynthesis, rs.autoContinue
+            │   ├─ Build rs.buildPrompt closure (lazySection for skills if allowlist/autoContinue active)
+            │   │
+            │   ├─ Tool loop:
+            │   │   ├─ rs.transport.SendMessageStream(rs.buildPrompt(), messages, tools)
+            │   │   │   ├─ OnText    → callback.OnText()
+            │   │   │   └─ tool_use → execute → callback.OnToolExec + OnToolResult
+            │   │   ├─ Append messages to session
+            │   │   ├─ launchBackgroundSummarizer(historySnapshot) [non-blocking]
+            │   │   └─ Repeat until end_turn or max_tokens
+            │   │
+            │   └─ Synthesis (if stop_reason=max_tokens and !rs.disableSynthesis)
+            │       └─ rs.transport.SendSynthesisStream(Opus) → refined answer
             │
-            ├─ transport.SendMessageStream(systemPrompt, messages, tools)
-            │   ├─ OnText    → sp.AddText()
-            │   ├─ OnToolExec → sp.AddToolStart()
-            │   └─ OnToolResult → sp.AddToolResult()
-            │
-            ├─ [tool loop]
-            │   ├─ Parse tool_use blocks
-            │   ├─ Execute tools (SQL / MCP / local)
-            │   ├─ Append tool_result to session
-            │   └─ SendMessageStream again → repeat until end_turn
-            │
-            ├─ [synthesis, if stop_reason=max_tokens and !DisableSynthesis]
-            │   └─ transport.SendSynthesisStream(Opus) → refined answer
-            │
-            └─ OnDone / OnError → sp.SetDone() / sp.SetError()
+            └─ OnDone / OnError
 
 Bubble Tea message loop
   └─ model.View() reads StreamProcessor → renders ANSI to terminal
@@ -1630,9 +1907,10 @@ Bubble Tea message loop
 <h4 id="agent-switching">Agent Switching</h4>
 <pre><code class="language-text">User selects agent from picker (Ctrl+A or /agent)
   └─ applyAgent(def)
-       └─ Swap activeAgent
-          (transport is created fresh on each Execute call — no manual recreation needed)
+       └─ m.activeAgent = &amp;agCopy   (heap copy via agents.Get or Snapshot()[i])
+          (rs.transport is created fresh on each Execute call — no manual recreation needed)
 </code></pre>
+<p>The agent picker and <code>/agent</code> command iterate <code>agents.Snapshot()</code> (not <code>agents.All</code> directly) so the reads are formally race-free even if <code>agents.Init()</code> reallocates the backing array.</p>
 <h4 id="skills">Skills</h4>
 <p>Slash-commands (e.g., <code>/sev-hunt</code>) inject the skill's prompt template as a prefix to the next user message.</p>
 <hr />
@@ -1700,7 +1978,7 @@ Bubble Tea message loop
 <h4 id="session-pool">Session Pool</h4>
 <pre><code class="language-text">sync.Map key: &quot;sessionID|pgEndpoint&quot;
 Value: sessionEntry {
-    agent     ai.Agent    ← reused (holds MCP connections, schema cache)
+    agent     ai.Agent    ← reused (holds MCP connections, schema cache, digestTransport)
     session   *ai.Session ← reused (holds message history)
     lastUsed  time.Time
 }
@@ -1718,23 +1996,24 @@ disconnect) without inheriting the caller's deadline. <strong>Do not pass a
 deadline-bearing context</strong> — the deadline cannot extend <code>def.Timeout</code>, and if
 it fires first it is indistinguishable from a user cancellation, causing the
 run to be misclassified as <code>CANCELLED</code> instead of <code>FAILED</code>. Set <code>def.Timeout</code>
-instead. Callers that previously wrapped <code>Execute</code> in their own
-<code>context.WithTimeout</code> (Sentinel, Watch, investigate CLI) now set <code>def.Timeout</code>
-in their constructors / call sites.</p>
+instead. Callers that wrap <code>Execute</code> (Sentinel, Watch, investigate CLI, connect)
+set <code>def.Timeout</code> rather than wrapping the context in <code>WithTimeout</code>.</p>
 </blockquote>
 <pre><code class="language-text">Execute(ctx, session, agentDef, prompt, callback, runCfg)
   │
-  ├─ 1. Create fresh transport for agentDef.Model (closed on return)
+  ├─ 1. Create rs (runState) — fresh per-call, never shared
+  │       rs.transport = NewClient(agentDef.Model)   [closed on return]
+  │       rs.autoContinue = runCfg.AutoContinue || agentDef.AutoContinue
+  │       rs.disableSynthesis = (resolved from runCfg + agentDef)
+  │       rs.allowedTools, rs.allowedSkills = (resolved from runCfg + agentDef)
   │
-  ├─ 2. Build system prompt
-  │       agent persona (from agentDef or agents/&lt;Name&gt;/SOUL.md)
-  │       + base prompt (falcon_prompt.md)
-  │       + DateSection
-  │       + schema context (tables, columns)
-  │       + table learnings
-  │       + extra sections
-  │       + insights
-  │       + skills (injected markdown from allowed skill list)
+  ├─ 2. Build rs.buildPrompt closure
+  │       If allowedSkills != nil or autoContinue:
+  │         → lazySection (re-evaluates skills on each Build() call)
+  │       Else:
+  │         → reuse a.skillsSection (shared MutableSection)
+  │       Combined with: persona + base prompt + DateSection + schema +
+  │                      table learnings + extra sections + insights
   │
   ├─ 3. Resolve allowed tools
   │       runCfg.AllowedTools → agentDef.Tools → nil (all tools)
@@ -1742,19 +2021,40 @@ in their constructors / call sites.</p>
   ├─ 4. Create OTel span (session ID, user, org, project, MCP tools)
   │
   ├─ 5. Tool loop
-  │       a. transport.SendMessageStream()
+  │       a. rs.transport.SendMessageStream(rs.buildPrompt(), messages, tools)
   │       b. Parse content blocks:
   │           - text → callback.OnText()
   │           - tool_use → execute tool → callback.OnToolExec + OnToolResult
   │       c. Append messages to session
-  │       d. If stop_reason=tool_use → repeat from (a)
-  │       e. If stop_reason=end_turn → done
-  │       f. If stop_reason=max_tokens + !DisableSynthesis → synthesis
+  │       d. launchBackgroundSummarizer(historySnapshot)   [non-blocking]
+  │       e. If stop_reason=tool_use → repeat from (a)
+  │       f. If stop_reason=end_turn → done
+  │       g. If stop_reason=max_tokens + !rs.disableSynthesis → synthesis
   │
   └─ 6. Synthesis (optional)
-          transport.SendSynthesisStream() with Opus
+          rs.transport.SendSynthesisStream() with Opus
           Opus synthesizes refined answer from full context
           callback.OnText(synthesized) → callback.OnDone()
+</code></pre>
+<hr />
+<h3 id="agent-lifecycle">Agent Lifecycle</h3>
+<pre><code class="language-text">NewAgent(infraCfg, store)
+  ├─ digestTransport = NewClient(&quot;&quot;)   [lifetime: until Close()]
+  ├─ loadMCPTools()
+  └─ registerLocalTools()
+
+Execute(ctx, session, def, prompt, cb, cfg...)  [may be called concurrently]
+  ├─ Creates fresh runState (transport + prompt closure + per-run config)
+  ├─ Runs tool loop
+  ├─ May launch background summarizer goroutines (tracked by interim.wg)
+  └─ Closes rs.transport on return
+
+Close()
+  ├─ interim.wg.Wait()             ← drain in-flight digest goroutines first
+  ├─ digestTransport.Close()       ← safe: no goroutine can use it after wg drains
+  ├─ sentinel.stop()
+  ├─ watch.stop()
+  └─ mcp.closeAll()                ← closes MCP server connections
 </code></pre>
 <hr />
 <h2 id="data-flow-summary">Data Flow Summary</h2>
@@ -1764,9 +2064,9 @@ in their constructors / call sites.</p>
                              │  Build system prompt              │
                              │  ├─ persona + base prompt         │
                              │  ├─ DB schema                     │
-                             │  └─ injected skills               │
+                             │  └─ skills (lazySection)          │
                              │                                   │
-                             │  Transport.SendMessageStream()    │
+                             │  rs.transport.SendMessageStream() │
                              │  ├─ text chunks ──► callback      │
                              │  └─ tool_use blocks               │
                              │       ├─ exec_sql → Postgres      │
@@ -1774,8 +2074,11 @@ in their constructors / call sites.</p>
                              │       └─ local tools → shell      │
                              │                                   │
                              │  Append to Session.Messages       │
-                             │  Repeat until end_turn            │
+                             │  launchBackgroundSummarizer()     │
+                             │    └─ digestTransport (shared)    │
+                             │         → OnInterimSummary        │
                              │                                   │
+                             │  Repeat until end_turn            │
                              │  [optional] Synthesis via Opus    │
                              └───────────────────────────────────┘
                                           │
