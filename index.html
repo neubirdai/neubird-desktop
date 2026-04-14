@@ -647,6 +647,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#async-prompt-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Async Prompt Queue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#sentinel-api" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1695,6 +1706,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#async-prompt-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Async Prompt Queue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#sentinel-api" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2261,8 +2283,85 @@ neubird --assess
 <td><code>/v1/sessions/feedback</code></td>
 <td>Submit rating or insight</td>
 </tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/v1/prompt/submit</code></td>
+<td>Submit a prompt for async processing (returns <code>prompt_id</code>)</td>
+</tr>
 </tbody>
 </table>
+<h3 id="async-prompt-queue">Async Prompt Queue</h3>
+<p>Prompts can be submitted to a Redis-backed queue instead of the synchronous <code>/v1/infer</code> endpoint. Any agent pod with access to the same Redis picks up the prompt and processes it. This enables horizontal scaling — add more pods to process more prompts in parallel.</p>
+<pre><code class="language-bash"># Submit a prompt
+curl -X POST http://localhost:8080/v1/prompt/submit \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;prompt&quot;: &quot;Why did latency spike on api-gateway?&quot;, &quot;project_uuid&quot;: &quot;your-project-id&quot;}'
+
+# Response: {&quot;prompt_id&quot;: &quot;a1b2c3d4-...&quot;}
+</code></pre>
+<p>The request body accepts the same fields as <code>/v1/infer</code>. If <code>prompt_id</code> is omitted, one is generated automatically.</p>
+<p><strong>Reading results</strong> — The agent streams output to Redis at <code>&lt;org&gt;:response:&lt;prompt_id&gt;</code>. Poll the status key <code>&lt;org&gt;:response:&lt;prompt_id&gt;:status</code> for the current state:</p>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>processing</code></td>
+<td>An agent is actively working on the prompt</td>
+</tr>
+<tr>
+<td><code>complete</code></td>
+<td>Prompt finished successfully</td>
+</tr>
+<tr>
+<td><code>dead_letter</code></td>
+<td>Prompt failed after exhausting all retries</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Retries and dead-letter</strong> — If an agent crashes or fails mid-prompt, the message stays in the queue and is automatically reclaimed by another agent after a configurable idle period. After the maximum number of delivery attempts (default 3), the prompt is moved to a dead-letter stream (<code>&lt;org&gt;:prompt:deadletter</code>) and marked <code>dead_letter</code> so it is not retried forever.</p>
+<p><strong>Configuration:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Env var</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>REDIS_URI</code></td>
+<td>Redis connection string</td>
+<td><code>redis://redis-master.platform.svc.cluster.local:6379</code></td>
+</tr>
+<tr>
+<td><code>ORG_NAME</code></td>
+<td>Org prefix for all Redis keys</td>
+<td><code>local</code></td>
+</tr>
+<tr>
+<td><code>PROMPT_QUEUE_MAX_CONCURRENT</code></td>
+<td>Max parallel prompt workers per pod</td>
+<td><code>8</code></td>
+</tr>
+<tr>
+<td><code>PROMPT_QUEUE_AUTOCLAIM_IDLE</code></td>
+<td>Idle time before a stalled prompt is reclaimed</td>
+<td><code>12m</code></td>
+</tr>
+<tr>
+<td><code>PROMPT_QUEUE_MAX_RETRIES</code></td>
+<td>Max delivery attempts before dead-letter</td>
+<td><code>3</code></td>
+</tr>
+</tbody>
+</table>
+<p>The consumer loop starts automatically when Redis is reachable. If Redis is not configured, the <code>/v1/prompt/submit</code> endpoint is not registered and only synchronous <code>/v1/infer</code> is available.</p>
 <h3 id="sentinel-api">Sentinel API</h3>
 <p>Start sentinel monitoring via the API:</p>
 <pre><code class="language-bash"># Start sentinel with custom intervals
