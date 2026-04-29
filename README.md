@@ -1,54 +1,46 @@
 <div align="center">
   <h1>Neubird Falcon</h1>
   <p><strong>The AI-native workspace for SRE operations.</strong></p>
-  <p>
-    Falcon is a desktop app that puts the Neubird agent — and the tools it needs to investigate your infrastructure —
-    into a single integrated workspace built on Code-OSS.
-  </p>
 </div>
 
----
+This repository is a **public release host** for Neubird Falcon installers
+(`.dmg`, and future platform packages).
 
-This repository hosts the **public download artifacts** for Neubird Falcon
-(`.dmg`, `.exe`, `.deb`, etc.). It does not contain source code; the source
-lives in [`neubirdai/falcon-app`](https://github.com/neubirdai/falcon-app)
-(private).
+- **App source code is not in this repository.**
+- Falcon source lives in the private engineering repo: `neubirdai/falcon-app`.
 
-The pattern mirrors [`neubirdai/neubird-desktop`](https://github.com/neubirdai/neubird-desktop),
-which hosts releases for the `neubird` CLI.
+## Install (macOS)
 
-## Install
-
-### Homebrew (recommended, macOS)
+### Homebrew (recommended)
 
 ```bash
 brew install --cask neubirdai/tap/falcon
 ```
 
-Brew automatically strips the macOS quarantine attribute, so Falcon launches
-without the "is damaged" Gatekeeper dialog you get from a raw `.dmg` download.
+For upgrades:
+
+```bash
+brew upgrade --cask neubirdai/tap/falcon
+```
 
 ### Direct download
 
-Grab the latest `.dmg` from [Releases](https://github.com/neubirdai/neubird-falcon-app/releases).
-On first launch, macOS may show "Neubird Falcon is damaged and can't be opened"
-because we don't yet ship Apple-notarized builds. Strip the quarantine flag
-and it'll open normally:
+1. Download the latest `NeubirdFalcon-darwin-arm64.dmg` from [Releases](https://github.com/neubirdai/neubird-falcon-app/releases).
+2. Remove quarantine (required until notarization is enabled):
 
 ```bash
 xattr -d com.apple.quarantine ~/Downloads/NeubirdFalcon-darwin-arm64.dmg
 ```
 
-Then double-click the `.dmg` and drag Falcon to `/Applications`.
+3. Open the DMG and drag **Neubird Falcon** to **Applications**.
+4. Launch and sign in with your Neubird environment URL.
 
-## What's inside
+## About “Source code” assets on Releases
 
-- The Falcon desktop app (Code-OSS fork, branded as **Neubird Falcon**)
-- The bundled `neubird` CLI sidecar (also distributed standalone via
-  [`neubirdai/neubird-desktop`](https://github.com/neubirdai/neubird-desktop))
-
-Sign in to your Neubird workspace from the app to start investigating.
+GitHub automatically adds **Source code (zip/tar.gz)** links to every tag.
+In this repo, those archives contain only this public release metadata
+(for example this README) and **not** the private Falcon application source.
 
 ## Reporting issues
 
-Open an issue against [`neubirdai/falcon-app`](https://github.com/neubirdai/falcon-app/issues).
+Please open issues in: https://github.com/neubirdai/falcon-app/issues
