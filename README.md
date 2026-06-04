@@ -2,9 +2,9 @@
   <h1>Neubird Falcon</h1>
   <p><strong>The AI-native workspace for SRE operations.</strong></p>
   <p>
-    <a href="https://neubird.ai">neubird.ai</a> ·
-    <a href="https://github.com/neubirdai/neubird-falcon-app/releases">Releases</a> ·
-    <a href="https://github.com/neubirdai/falcon-app/issues">Report an issue</a>
+    <a href="https://neubird.ai">neubird.ai</a> &nbsp;·&nbsp;
+    <a href="https://github.com/neubirdai/neubird-falcon-app/releases">Releases</a> &nbsp;·&nbsp;
+    <a href="https://neubird.ai/docs">Documentation</a>
   </p>
 </div>
 
@@ -12,43 +12,40 @@
 
 ## What is Falcon?
 
-Falcon is Neubird's AI-native SRE workspace — a desktop application built on Code OSS that replaces the fragmented tab-switching of traditional SRE workflows with a single, always-on environment that understands your infrastructure.
+Falcon is the AI workspace built for modern SRE teams. It brings active investigation management, AI-assisted root-cause analysis, and team coordination into a single desktop environment — so your engineers spend less time context-switching and more time resolving incidents.
 
-Falcon connects to your Neubird environment and surfaces the right context, investigations, and recommended actions exactly when you need them. Instead of correlating logs, traces, alerts, and runbooks across five separate tools, you work inside one workspace where the AI has already done that correlation for you.
+Connect Falcon to your Neubird environment and it starts working immediately: surfacing active incidents, analyzing signals across your stack, and recommending next steps.
 
 ---
 
-## Features
+## Capabilities
 
-### Falcon Flow — Investigation management
-Track and navigate active investigations from a dedicated panel. Falcon Flow shows open incidents with real-time status, lets you drill into the AI's root-cause analysis, and surfaces follow-up actions as the situation evolves.
+**Active investigation tracking**
+See all open investigations in one place, with live status and AI-generated summaries. Your team always knows what needs attention right now and what's already being worked.
 
-### Falcon Agent — AI-powered SRE assistant
-An AI agent embedded in your workspace that answers questions about your infrastructure, runs diagnostic commands (with your approval), and synthesizes findings across logs, metrics, and traces into plain-language explanations your whole team can act on.
+**AI-assisted root-cause analysis**
+Falcon correlates signals across logs, metrics, and traces and presents a plain-language explanation of what's happening and why. Ask follow-up questions in natural language and get answers grounded in your actual infrastructure data.
 
-### Falcon Huddle — Smart incident routing
-When an incident needs human escalation, Falcon Huddle identifies the right team and surfaces the relevant Slack channels and on-call handles — with the reasoning behind the recommendation. One click opens the Slack conversation with context pre-filled.
+**Smart team routing**
+When an incident needs escalation, Falcon identifies the right owners and surfaces the fastest path to reach them — including direct links into your team's communication channels. No more guessing who's on call.
 
-### Falcon Learnings — Institutional memory
-Teach Falcon what your organization has already learned from past incidents. Learnings are automatically applied during future investigations so the AI doesn't re-discover the same root causes or recommend already-ruled-out fixes.
+**Institutional memory**
+Capture what your team learns from each incident and apply it automatically to future investigations. Falcon gets smarter the more your team uses it, reducing time-to-resolution on recurring issues.
 
-### Mission Control — Unified status view
-A birds-eye view of your environment's health. Mission Control aggregates service status, active incidents, and recent deployments so you always know the current state of your system at a glance — without opening a browser.
+**Environment health at a glance**
+A unified view of service health, recent deployments, and active incidents — giving you the situational awareness to make fast, confident decisions under pressure.
 
-### Risk Sentinel — Proactive risk monitoring
-Falcon watches your environment continuously and surfaces anomalies before they become incidents. Risk Sentinel highlights signals that warrant attention, with confidence scores and direct links to the underlying data.
+**Proactive risk detection**
+Falcon continuously monitors your environment and surfaces anomalies before they escalate into incidents, giving your team a head start on prevention rather than just reaction.
 
-### Falcon Build — CI/deployment awareness
-Correlates deployment events with incident timelines so you can quickly determine whether a recent release is related to an ongoing degradation — cutting the most common "is this a deploy?" back-and-forth from your war room.
+**Deployment correlation**
+Automatically links releases with system behavior changes so you can quickly confirm or rule out whether a recent deploy is causing a degradation.
 
-### Service Map integration
-Falcon understands your service dependency graph and uses it to scope investigations. When `auth-service` is slow, Falcon knows which upstream and downstream services to check next, and prioritizes them automatically.
+**Extensible by design**
+Connect Falcon to additional data sources, internal tools, and runbooks using the Model Context Protocol (MCP). Bring your own context without custom integrations.
 
-### MCP (Model Context Protocol) support
-Extend Falcon with additional data sources and tools via MCP servers. Connect internal dashboards, runbooks, or proprietary observability data to give the AI richer context for investigations — no code changes required.
-
-### Human-in-the-loop safety
-Falcon never takes autonomous action in production. Every proposed command or remediation step goes through an approval gate, keeping your team in control of what actually runs.
+**Always human-in-the-loop**
+Falcon assists and recommends — it never acts autonomously in your production environment. Every action requires explicit approval.
 
 ---
 
@@ -83,21 +80,14 @@ xattr -d com.apple.quarantine ~/Downloads/NeubirdFalcon-darwin-arm64.dmg
 ## Getting started
 
 1. Install Falcon using one of the methods above.
-2. Launch the app and enter your Neubird environment URL (e.g. `https://app.neubird.ai`).
+2. Launch the app and enter your Neubird environment URL.
 3. Sign in with your organization credentials.
-4. Falcon will connect to your environment and begin populating Falcon Flow with active investigations.
+4. Falcon connects to your environment and begins surfacing active investigations immediately.
+
+For full documentation, visit [neubird.ai/docs](https://neubird.ai/docs).
 
 ---
 
-## About "Source code" assets on Releases
-
-GitHub automatically adds **Source code (zip/tar.gz)** links to every tag.
-In this repo, those archives contain only this public release metadata
-(for example this README) and **not** the private Falcon application source.
-
-- **App source code is not in this repository.**
-- Falcon source lives in the private engineering repo: `neubirdai/falcon-app`.
-
 ## Reporting issues
 
-Please open issues at: https://github.com/neubirdai/falcon-app/issues
+Please open an issue at: https://github.com/neubirdai/falcon-app/issues
