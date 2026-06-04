@@ -88,6 +88,6 @@ For full documentation, visit [neubird.ai/docs](https://neubird.ai/docs).
 
 ---
 
-## Reporting issues
+## Support
 
-Please open an issue at: https://github.com/neubirdai/falcon-app/issues
+For help and feedback, visit [neubird.ai/docs](https://neubird.ai/docs) or reach out via [neubird.ai](https://neubird.ai).
