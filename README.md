@@ -49,31 +49,38 @@ Neubird Desktop assists and recommends — it never acts autonomously in your pr
 
 ---
 
-## Install (macOS)
+## Download
 
-### Homebrew (recommended)
+Every release ships two editions, and they install side by side:
+
+- **NeuBird Desktop** — the standard app for SRE operations.
+- **NeuBird Aerie** — the manager edition: same app platform, with a manager-focused workspace (Activity, Analyst, Insights).
+
+Direct downloads (always the latest release):
+
+| Edition | macOS (universal) | Windows x64 | Windows arm64 |
+| --- | --- | --- | --- |
+| NeuBird Desktop | [Download .dmg](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdDesktopShell-darwin-universal.dmg) | [Download installer](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdDesktopShellSetup-x64.exe) | [Download installer](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdDesktopShellSetup-arm64.exe) |
+| NeuBird Aerie | [Download .dmg](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdAerie-darwin-universal.dmg) | [Download installer](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdAerieSetup-x64.exe) | [Download installer](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdAerieSetup-arm64.exe) |
+
+All versions, with release notes, are on the [Releases](https://github.com/neubirdai/neubird-desktop/releases) page.
+
+### macOS
+
+**Homebrew (recommended for NeuBird Desktop — it is also the auto-update path):**
 
 ```bash
-brew install --cask neubirdai/tap/Neubird Desktop
+brew install --cask neubirdai/tap/neubird-desktop   # first install
+brew upgrade --cask neubird-desktop                 # updates
 ```
 
-For upgrades:
+NeuBird Aerie has no Homebrew cask yet — use the direct download above.
 
-```bash
-brew upgrade --cask neubirdai/tap/Neubird Desktop
-```
+**Direct download:** open the `.dmg` and drag the app to **Applications**. macOS builds are codesigned and notarized, so no quarantine workarounds are needed.
 
-### Direct download
+### Windows
 
-1. Download the latest `NeubirdNeubird Desktop-darwin-arm64.dmg` from [Releases](https://github.com/neubirdai/neubird-Neubird Desktop-app/releases).
-2. Remove quarantine (required until notarization is enabled):
-
-```bash
-xattr -d com.apple.quarantine ~/Downloads/NeubirdNeubird Desktop-darwin-arm64.dmg
-```
-
-3. Open the DMG and drag **Neubird Neubird Desktop** to **Applications**.
-4. Launch and sign in with your Neubird environment URL.
+Download the installer matching your architecture (`x64` for standard machines, `arm64` for Snapdragon/Copilot+ devices) and run it. If SmartScreen shows "Windows protected your PC", click **More info → Run anyway**.
 
 ---
 
