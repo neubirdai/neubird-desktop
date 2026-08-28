@@ -51,30 +51,27 @@ Neubird Desktop assists and recommends — it never acts autonomously in your pr
 
 ## Download
 
-Every release ships two editions, and they install side by side:
+One app, two modes — pick the workspace that fits you on first launch, and switch any time from the account menu:
 
-- **NeuBird Desktop** — the standard app for SRE operations.
-- **NeuBird Aerie** — the manager edition: same app platform, with a manager-focused workspace (Activity, Analyst, Insights).
+- **Co-Worker** — the standard workspace for SRE operations.
+- **Aerie** — the manager workspace: Activity, Analyst and Insights.
 
 Direct downloads (always the latest release):
 
-| Edition | macOS (universal) | Windows x64 | Windows arm64 |
-| --- | --- | --- | --- |
-| NeuBird Desktop | [Download .dmg](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdDesktopShell-darwin-universal.dmg) | [Download installer](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdDesktopShellSetup-x64.exe) | [Download installer](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdDesktopShellSetup-arm64.exe) |
-| NeuBird Aerie | [Download .dmg](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdAerie-darwin-universal.dmg) | [Download installer](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdAerieSetup-x64.exe) | [Download installer](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdAerieSetup-arm64.exe) |
+| macOS (universal) | Windows x64 | Windows arm64 |
+| --- | --- | --- |
+| [Download .dmg](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdDesktopShell-darwin-universal.dmg) | [Download installer](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdDesktopShellSetup-x64.exe) | [Download installer](https://github.com/neubirdai/neubird-desktop/releases/latest/download/NeubirdDesktopShellSetup-arm64.exe) |
 
 All versions, with release notes, are on the [Releases](https://github.com/neubirdai/neubird-desktop/releases) page.
 
 ### macOS
 
-**Homebrew (recommended for NeuBird Desktop — it is also the auto-update path):**
+**Homebrew (recommended — it is also the auto-update path):**
 
 ```bash
 brew install --cask neubirdai/tap/neubird-desktop   # first install
 brew upgrade --cask neubird-desktop                 # updates
 ```
-
-NeuBird Aerie has no Homebrew cask yet — use the direct download above.
 
 **Direct download:** open the `.dmg` and drag the app to **Applications**. macOS builds are codesigned and notarized, so no quarantine workarounds are needed.
 
@@ -87,9 +84,10 @@ Download the installer matching your architecture (`x64` for standard machines, 
 ## Getting started
 
 1. Install Neubird Desktop using one of the methods above.
-2. Launch the app and enter your Neubird environment URL.
-3. Sign in with your organization credentials.
-4. Neubird Desktop connects to your environment and begins surfacing active investigations immediately.
+2. Launch the app and choose your workspace — **Co-Worker** or **Aerie**. You can switch later from the account menu.
+3. Enter your Neubird environment URL.
+4. Sign in with your organization credentials.
+5. Neubird Desktop connects to your environment and begins surfacing active investigations immediately.
 
 For full documentation, visit [neubird.ai/docs](https://neubird.ai/docs).
 
