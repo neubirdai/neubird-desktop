@@ -54,7 +54,7 @@ Neubird Desktop assists and recommends — it never acts autonomously in your pr
 One app, two modes — pick the workspace that fits you on first launch, and switch any time from the account menu:
 
 - **Co-Worker** — the standard workspace for SRE operations.
-- **Aerie** — the manager workspace: Activity, Analyst and Insights.
+- **Team Lead** — the manager workspace: Activity, Analyst and Insights.
 
 Direct downloads (always the latest release):
 
@@ -84,7 +84,7 @@ Download the installer matching your architecture (`x64` for standard machines, 
 ## Getting started
 
 1. Install Neubird Desktop using one of the methods above.
-2. Launch the app and choose your workspace — **Co-Worker** or **Aerie**. You can switch later from the account menu.
+2. Launch the app and choose your workspace — **Co-Worker** or **Team Lead**. You can switch later from the account menu.
 3. Enter your Neubird environment URL.
 4. Sign in with your organization credentials.
 5. Neubird Desktop connects to your environment and begins surfacing active investigations immediately.
